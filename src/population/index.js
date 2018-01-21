@@ -1,3 +1,7 @@
 import Individual from './Individual';
+import Population from './Population';
 
-export default Individual;
+export {
+    Individual,
+    Population,
+};
