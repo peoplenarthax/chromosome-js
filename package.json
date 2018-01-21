@@ -1,0 +1,46 @@
+{
+  "name": "chromosome-js",
+  "version": "1.0.0",
+  "description": "Evolutionary Algorithms",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peoplenarthax/chromosome-js"
+  },
+  "author": "Angel Paredes Barato",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint \"src/**/*.js\" \"tests/**/*.js\"",
+    "lint-fix-all": "eslint --fix \"src/**/*.js\" \"tests/**/*.js\"",
+    "precommit": "lint-staged",
+    "prepush": "jest",
+    "build": "gulp build",
+    "autofix": "onchange **/*.js -- eslint {{changed}} --fix"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "files": [
+    "**/dist/*"
+  ],
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-3": "^6.24.1",
+    "eslint": "^4.6.1",
+    "eslint-config-airbnb-base": "^12.0.2",
+    "eslint-import-resolver-alias": "^1.0.3",
+    "eslint-plugin-import": "2.7.0",
+    "husky": "^0.14.3",
+    "jest": "^21.0.0",
+    "jest-babel": "^1.0.1",
+    "jest-mock-random": "^1.0.1",
+    "lint-staged": "^4.2.3",
+    "onchange": "^3.2.1",
+    "testier": "^1.0.0-alpha3"
+  }
+}
