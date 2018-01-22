@@ -6,6 +6,7 @@ import {
     selectBest,
     selectWorst,
     selectByTournament,
+    selectRoulette,
 } from '../selection';
 
 describe('Selection', () => {
@@ -121,7 +122,7 @@ describe('Selection', () => {
                 .withIndividuals(10)
                 .build();
 
-            const actual = selectByTournament(3, 3, population);
+            const actual = selectByTournament(3, population, 3);
 
             expect(actual).toEqual([
                 new IndividualBuilder().withFitness(10).build(),
@@ -134,7 +135,7 @@ describe('Selection', () => {
                 .withIndividuals(10)
                 .build();
 
-            const actual = selectByTournament(3, 3, population, { removeWinners: true });
+            const actual = selectByTournament(3, population, 3, { removeWinners: true });
 
             expect(actual).toEqual([
                 new IndividualBuilder().withFitness(10).build(),
@@ -147,16 +148,32 @@ describe('Selection', () => {
                 .withIndividuals(3)
                 .build();
 
-            const actual = () => selectByTournament(4, 3, population);
+            const actual = () => selectByTournament(4, population, 3);
 
             expect(actual).toThrow(RangeError);
         });
-        it('throws an error when the requested tournament size is bigger than the initial population', () => {
+    });
+    describe('selectRoulette', () => {
+        mockRandomWith([0.01, 0.1, 0.3, 0.9, 0.8, 0.1, 0.5, 0.5]);
+        it('returns individual using a stochastic acceptance', () => {
+            const population = new PopulationBuilder()
+                .withIndividuals(10)
+                .build();
+
+            const actual = selectRoulette(3, population);
+
+            expect(actual).toEqual([
+                new IndividualBuilder().withFitness(10).build(),
+                new IndividualBuilder().withFitness(3).build(),
+                new IndividualBuilder().withFitness(5).build(),
+            ]);
+        });
+        it('throws an error when the requested amount is bigger than the population', () => {
             const population = new PopulationBuilder()
                 .withIndividuals(3)
                 .build();
 
-            const actual = () => selectByTournament(3, 4, population);
+            const actual = () => selectRoulette(4, population);
 
             expect(actual).toThrow(RangeError);
         });

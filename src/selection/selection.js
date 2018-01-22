@@ -1,17 +1,24 @@
 import { DECREASING, INCREASING } from '../constants/rank';
 
-export function selectRandom(amount, { population }) {
-    if (amount > population.length) {
+const rangeCheckedFunction = (...args) => {
+    if (args[0] > args[1].population.length) {
         throw new RangeError('You cannot select more individuals than the population size');
     }
+    return args[args.length - 1](...args);
+};
+
+export const selectRandom = (...args) => rangeCheckedFunction(...args, random);
+export const selectBest = (...args) => rangeCheckedFunction(...args, best);
+export const selectWorst = (...args) => rangeCheckedFunction(...args, worst);
+export const selectByTournament = (...args) => rangeCheckedFunction(...args, tournament);
+export const selectRoulette = (...args) => rangeCheckedFunction(...args, roulette);
+
+function random(amount, { population }) {
     return [...new Array(amount)]
         .map(() => population[Math.round(Math.random() * (population.length - 1))]);
 }
 
-export function selectBest(amount, { population, rank }) {
-    if (amount > population.length) {
-        throw new RangeError('You cannot select more individuals than the population size');
-    }
+function best(amount, { population, rank }) {
     if (rank === DECREASING) {
         return population.slice(0, amount);
     }
@@ -20,10 +27,7 @@ export function selectBest(amount, { population, rank }) {
     return population.slice(length - amount, length).reverse();
 }
 
-export function selectWorst(amount, { population, rank }) {
-    if (amount > population.length) {
-        throw new RangeError('You cannot select more individuals than the population size');
-    }
+function worst(amount, { population, rank }) {
     if (rank === INCREASING) {
         return population.slice(0, amount);
     }
@@ -32,10 +36,7 @@ export function selectWorst(amount, { population, rank }) {
     return population.slice(length - amount, length).reverse();
 }
 
-export function selectByTournament(amount, tournamentSize, { population }, { removeWinners } = {}) {
-    if (amount > population.length || tournamentSize > population.length) {
-        throw new RangeError('You cannot select more individuals than the population size');
-    }
+function tournament(amount, { population }, tournamentSize, { removeWinners } = {}) {
     const selected = [];
     const availablePopulation = population;
     for (let k = 0; k < amount; k++) { // eslint-disable-line no-plusplus
@@ -46,7 +47,7 @@ export function selectByTournament(amount, tournamentSize, { population }, { rem
                     ...availablePopulation[Math.floor(Math.random() * availablePopulation.length)],
                     index,
                 }))
-            .reduce((best, ind) => (ind.fitness > best.fitness ? ind : best), { fitness: 0 });
+            .reduce((winner, ind) => (ind.fitness > winner.fitness ? ind : winner), { fitness: 0 });
 
         const { index, ...selectedIndividual } = tournamentWinner;
         selected.push(selectedIndividual);
@@ -54,6 +55,21 @@ export function selectByTournament(amount, tournamentSize, { population }, { rem
         if (removeWinners) {
             availablePopulation.splice(index, 1);
         }
+    }
+
+    return selected;
+}
+
+function roulette(amount, { population }) {
+    const maxFitness = population[0].fitness;
+    const selected = [];
+    for (let k = 0; k < amount; k++) { // eslint-disable-line no-plusplus
+        let index;
+        while (true) { // eslint-disable-line no-constant-condition
+            index = Math.round(Math.random() * (population.length - 1));
+            if (Math.random() <= (population[index].fitness / maxFitness)) break;
+        }
+        selected.push(population[index]);
     }
 
     return selected;
