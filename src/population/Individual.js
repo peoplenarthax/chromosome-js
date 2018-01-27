@@ -11,5 +11,6 @@ export default function generateIndividual(features, fitnessFunction) {
     return {
         features,
         fitness: fitnessFunction(features),
+        fitnessFunction,
     };
 }

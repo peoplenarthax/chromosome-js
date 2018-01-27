@@ -6,13 +6,13 @@ describe('Population', () => {
     describe('constructor', () => {
         it('saves the individuals', () => {
             const actual = generatePopulation([
-                new IndividualBuilder().build(),
-                new IndividualBuilder().build(),
+                new IndividualBuilder().withoutFitnessFunction().build(),
+                new IndividualBuilder().withoutFitnessFunction().build(),
             ]);
 
             expect(actual.population).toEqual([
-                new IndividualBuilder().build(),
-                new IndividualBuilder().build(),
+                new IndividualBuilder().withoutFitnessFunction().build(),
+                new IndividualBuilder().withoutFitnessFunction().build(),
             ]);
         });
 
@@ -26,10 +26,18 @@ describe('Population', () => {
 
             expect(actual).toEqual({
                 population: [
-                    new IndividualBuilder().withFitness(4000).build(),
-                    new IndividualBuilder().withFitness(1000).build(),
-                    new IndividualBuilder().withFitness(100).build(),
-                    new IndividualBuilder().withFitness(50).build(),
+                    expect.objectContaining({
+                        fitness: 4000,
+                    }),
+                    expect.objectContaining({
+                        fitness: 1000,
+                    }),
+                    expect.objectContaining({
+                        fitness: 100,
+                    }),
+                    expect.objectContaining({
+                        fitness: 50,
+                    }),
                 ],
                 rank: 'decreasing',
             });
@@ -44,10 +52,18 @@ describe('Population', () => {
 
             expect(actual).toEqual({
                 population: [
-                    new IndividualBuilder().withFitness(50).build(),
-                    new IndividualBuilder().withFitness(100).build(),
-                    new IndividualBuilder().withFitness(1000).build(),
-                    new IndividualBuilder().withFitness(4000).build(),
+                    expect.objectContaining({
+                        fitness: 50,
+                    }),
+                    expect.objectContaining({
+                        fitness: 100,
+                    }),
+                    expect.objectContaining({
+                        fitness: 1000,
+                    }),
+                    expect.objectContaining({
+                        fitness: 4000,
+                    }),
                 ],
                 rank: 'increasing',
             });
