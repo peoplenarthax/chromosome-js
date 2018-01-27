@@ -2177,8 +2177,8 @@ jest-message-util@^21.2.1:
     slash "^1.0.0"
 
 jest-mock-random@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/jest-mock-random/-/jest-mock-random-1.0.1.tgz#96ae941a3e6135cac3d89c990f21333efc57a60c"
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/jest-mock-random/-/jest-mock-random-1.0.2.tgz#81a1aa641fdb3a049bf64e2a7a0411fd8fc3fb20"
 
 jest-mock@^21.2.0:
   version "21.2.0"
