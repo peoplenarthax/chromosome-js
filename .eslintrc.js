@@ -44,6 +44,7 @@ module.exports = {
                 'functions': false
             }
         ],
+        'no-bitwise': 0,
     },
     'overrides': [
         {
