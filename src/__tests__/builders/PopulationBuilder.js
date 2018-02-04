@@ -1,5 +1,5 @@
 import IndividualBuilder from './IndividualBuilder';
-import { DECREASING } from '../../../constants/rank';
+import { DECREASING } from '../../constants/rank';
 
 export default class PopulationBuilder {
 

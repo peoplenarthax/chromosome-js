@@ -1,7 +1,7 @@
 import { mockRandomForEach } from 'jest-mock-random';
 import { forAll } from 'testier';
 import { flipMutation, intInRangeMutation } from '../mutation';
-import IndividualBuilder from '../../population/__tests__/builders/IndividualBuilder';
+import IndividualBuilder from '../../__tests__/builders/IndividualBuilder';
 
 describe('Mutation', () => {
     describe('flipMutation', () => {

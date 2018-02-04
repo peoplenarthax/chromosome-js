@@ -1,5 +1,5 @@
 import generatePopulation from '../Population';
-import IndividualBuilder from './builders/IndividualBuilder';
+import IndividualBuilder from '../../__tests__/builders/IndividualBuilder';
 import { INCREASING } from '../../constants/rank';
 
 describe('Population', () => {

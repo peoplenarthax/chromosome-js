@@ -1,6 +1,6 @@
 import { mockRandom, resetMockRandom } from 'jest-mock-random';
 import { forAll } from 'testier';
-import IndividualBuilder from '../../population/__tests__/builders/IndividualBuilder';
+import IndividualBuilder from '../../__tests__/builders/IndividualBuilder';
 import { onePointCrossOver, twoPointCrossOver } from '../crossover';
 
 describe('onePointCrossOver', () => {

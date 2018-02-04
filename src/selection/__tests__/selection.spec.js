@@ -1,5 +1,5 @@
 import { mockRandomForEach } from 'jest-mock-random';
-import PopulationBuilder from '../../population/__tests__/builders/PopulationBuilder';
+import PopulationBuilder from '../../__tests__/builders/PopulationBuilder';
 import {
     selectRandom,
     selectBest,
