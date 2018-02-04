@@ -1,7 +1,8 @@
 import generateIndividual from '../population/Individual';
+import randomInRange from '../utils/random/randomInRange';
 
 export function onePointCrossOver({ features: features1, fitnessFunction }, { features: features2 }) {
-    const fixCrossPoint = Math.round(Math.random() * (features1.length - 1));
+    const fixCrossPoint = randomInRange(features1.length - 1);
 
     const featuresChild1 = [
         ...features1.slice(0, fixCrossPoint),
@@ -18,8 +19,8 @@ export function onePointCrossOver({ features: features1, fitnessFunction }, { fe
 }
 
 export function twoPointCrossOver({ features: features1, fitnessFunction }, { features: features2 }) {
-    let fixCrossPoint1 = Math.round(Math.random() * (features1.length - 1));
-    let fixCrossPoint2 = Math.round(Math.random() * (features1.length - 1));
+    let fixCrossPoint1 = randomInRange(features1.length - 1);
+    let fixCrossPoint2 = randomInRange(features1.length - 1);
 
     if (fixCrossPoint1 > fixCrossPoint2) {
         [fixCrossPoint1, fixCrossPoint2] = [fixCrossPoint2, fixCrossPoint1];

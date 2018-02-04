@@ -1,4 +1,5 @@
 import { DECREASING, INCREASING } from '../constants/rank';
+import randomInRange from '../utils/random/randomInRange';
 
 const rangeCheckedFunction = (...args) => {
     if (args[0] > args[1].population.length) {
@@ -15,7 +16,7 @@ export const selectRoulette = (...args) => rangeCheckedFunction(...args, roulett
 
 function random(amount, { population }) {
     return [...new Array(amount)]
-        .map(() => population[Math.round(Math.random() * (population.length - 1))]);
+        .map(() => population[randomInRange(population.length - 1)]);
 }
 
 function best(amount, { population, rank }) {
@@ -44,7 +45,7 @@ function tournament(amount, { population }, tournamentSize, { removeWinners } = 
             .fill()
             .map((participant, index) =>
                 ({
-                    ...availablePopulation[Math.floor(Math.random() * availablePopulation.length)],
+                    ...availablePopulation[randomInRange(availablePopulation.length)],
                     index,
                 }))
             .reduce((winner, ind) => (ind.fitness > winner.fitness ? ind : winner), { fitness: 0 });
@@ -66,7 +67,7 @@ function roulette(amount, { population }) {
     for (let k = 0; k < amount; k++) { // eslint-disable-line no-plusplus
         let index;
         while (true) { // eslint-disable-line no-constant-condition
-            index = Math.round(Math.random() * (population.length - 1));
+            index = randomInRange(population.length - 1);
             if (Math.random() <= (population[index].fitness / maxFitness)) break;
         }
         selected.push(population[index]);

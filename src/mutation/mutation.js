@@ -1,8 +1,4 @@
-function randomBetween(lower, upper) {
-    const width = upper - lower;
-
-    return Math.round(Math.random() * width) + lower;
-}
+import randomInRange from '../utils/random/randomInRange';
 
 export function flipMutation(mutationProbability, { features }) {
     return features
@@ -12,6 +8,6 @@ export function flipMutation(mutationProbability, { features }) {
 export function intInRangeMutation(mutationProbability, range, { features }) {
     return features
         .map(feature => ((Math.random() < mutationProbability)
-            ? randomBetween(...range)
+            ? randomInRange(...range)
             : feature));
 }
