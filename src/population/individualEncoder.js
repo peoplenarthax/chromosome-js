@@ -31,13 +31,20 @@ export default function individualEncoder(populationSolutionSpace) {
     return {
         ...encodingInfo,
         encode: function encodes(individual) {
-            return Object.keys(individual)
-                .map(key =>
-                    toArrayWithPadLeft(
+            const encodedIndividual = new Array(encodingInfo.totalBits).fill(0);
+
+            Object.keys(individual)
+                .forEach((key) => {
+                    const { bits, position } = encodingInfo.features[key];
+                    const gene = toArrayWithPadLeft(
                         toBinary(individual[key]),
                         encodingInfo.features[key].bits,
-                    ))
-                .reduce((acc, current) => ([...acc, ...current]), []);
+                    );
+                    // TODO immutable way for splice
+                    encodedIndividual.splice(position, bits, ...gene);
+                });
+
+            return encodedIndividual;
         },
     };
 }

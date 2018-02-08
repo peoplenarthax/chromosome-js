@@ -57,5 +57,27 @@ describe('individualEncoder', () => {
 
             expect(actual).toEqual([0, 0, 0, 0, 1, 0, 0]);
         });
+
+        it('generates padding on the empty features', () => {
+            const sut = individualEncoder([
+                { name: 'age', values: [0, 99] },
+                { name: 'height', values: [0, 179] },
+            ]);
+
+            const actual = sut.encode({ age: 4 });
+
+            expect(actual).toEqual([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        });
+
+        it('encodes a passed individual with more than one feature', () => {
+            const sut = individualEncoder([
+                { name: 'age', values: [0, 99] },
+                { name: 'height', values: [0, 179] },
+            ]);
+
+            const actual = sut.encode({ age: 4, height: 2 });
+
+            expect(actual).toEqual([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0]);
+        });
     });
 });
