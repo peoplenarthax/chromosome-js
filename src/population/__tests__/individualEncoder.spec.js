@@ -35,7 +35,7 @@ describe('individualEncoder', () => {
                 name: 'height',
                 values: [0, 178],
                 bits: 8,
-                position: 7,
+                position: 1,
             },
         }));
     });
