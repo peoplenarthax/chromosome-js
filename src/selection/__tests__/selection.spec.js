@@ -63,25 +63,6 @@ describe('Selection', () => {
             ]);
         });
 
-        it('gives back the best elements from a increasing ordered population', () => {
-            const population = new PopulationBuilder()
-                .withIndividuals(10, 'increasing')
-                .build();
-
-            const actual = selectBest(3, population);
-
-            expect(actual).toEqual([
-                expect.objectContaining({
-                    fitness: 10,
-                }),
-                expect.objectContaining({
-                    fitness: 9,
-                }),
-                expect.objectContaining({
-                    fitness: 8,
-                }),
-            ]);
-        });
         it('throws an error when the requested amount is bigger than the population', () => {
             const population = new PopulationBuilder()
                 .withIndividuals(3)
@@ -97,26 +78,6 @@ describe('Selection', () => {
         it('gives back the worst elements from a decreasing ordered population', () => {
             const population = new PopulationBuilder()
                 .withIndividuals(10)
-                .build();
-
-            const actual = selectWorst(3, population);
-
-            expect(actual).toEqual([
-                expect.objectContaining({
-                    fitness: 1,
-                }),
-                expect.objectContaining({
-                    fitness: 2,
-                }),
-                expect.objectContaining({
-                    fitness: 3,
-                }),
-            ]);
-        });
-
-        it('gives back the worst elements from a increasing ordered population', () => {
-            const population = new PopulationBuilder()
-                .withIndividuals(10, 'increasing')
                 .build();
 
             const actual = selectWorst(3, population);
@@ -151,7 +112,7 @@ describe('Selection', () => {
                 .withIndividuals(10)
                 .build();
 
-            const actual = selectByTournament(3, population, 3);
+            const actual = selectByTournament(3, population, { tournamentSize: 3 });
 
             expect(actual).toEqual([
                 expect.objectContaining({
@@ -170,7 +131,7 @@ describe('Selection', () => {
                 .withIndividuals(10)
                 .build();
 
-            const actual = selectByTournament(3, population, 3, { removeWinners: true });
+            const actual = selectByTournament(3, population, { tournamentSize: 3, removeWinners: true });
 
             expect(actual).toEqual([
                 expect.objectContaining({
@@ -189,7 +150,7 @@ describe('Selection', () => {
                 .withIndividuals(3)
                 .build();
 
-            const actual = () => selectByTournament(4, population, 3);
+            const actual = () => selectByTournament(4, population, { tournamentSize: 3 });
 
             expect(actual).toThrow(RangeError);
         });

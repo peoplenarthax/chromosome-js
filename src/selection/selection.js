@@ -1,8 +1,7 @@
-import { DECREASING, INCREASING } from '../constants/rank';
 import randomInRange from '../utils/random/randomInRange';
 
 const rangeCheckedFunction = (...args) => {
-    if (args[0] > args[1].population.length) {
+    if (args[0] > args[1].length) {
         throw new RangeError('You cannot select more individuals than the population size');
     }
     return args[args.length - 1](...args);
@@ -14,30 +13,22 @@ export const selectWorst = (...args) => rangeCheckedFunction(...args, worst);
 export const selectByTournament = (...args) => rangeCheckedFunction(...args, tournament);
 export const selectRoulette = (...args) => rangeCheckedFunction(...args, roulette);
 
-function random(amount, { population }) {
+function random(amount, population) {
     return [...new Array(amount)]
         .map(() => population[randomInRange(population.length - 1)]);
 }
 
-function best(amount, { population, rank }) {
-    if (rank === DECREASING) {
-        return population.slice(0, amount);
-    }
+function best(amount, population) {
+    return population.slice(0, amount);
+}
+
+function worst(amount, population) {
     const { length } = population;
 
     return population.slice(length - amount, length).reverse();
 }
 
-function worst(amount, { population, rank }) {
-    if (rank === INCREASING) {
-        return population.slice(0, amount);
-    }
-    const { length } = population;
-
-    return population.slice(length - amount, length).reverse();
-}
-
-function tournament(amount, { population }, tournamentSize, { removeWinners } = {}) {
+function tournament(amount, population, { tournamentSize = 2, removeWinners } = {}) {
     const selected = [];
     const availablePopulation = population;
     for (let k = 0; k < amount; k++) { // eslint-disable-line no-plusplus
@@ -61,7 +52,7 @@ function tournament(amount, { population }, tournamentSize, { removeWinners } = 
     return selected;
 }
 
-function roulette(amount, { population }) {
+function roulette(amount, population) {
     const maxFitness = population[0].fitness;
     const selected = [];
     for (let k = 0; k < amount; k++) { // eslint-disable-line no-plusplus
