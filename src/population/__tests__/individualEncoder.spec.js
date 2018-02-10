@@ -79,5 +79,26 @@ describe('individualEncoder', () => {
 
             expect(actual).toEqual([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0]);
         });
+
+        it('encodes a passed individual with decimal range', () => {
+            const sut = individualEncoder([{ name: 'grams', values: [0.00, 0.99] }]);
+
+            const actual = sut.encode({ grams: 0.04 });
+
+            expect(actual).toEqual([0, 0, 0, 0, 1, 0, 0]);
+        });
+
+        it.only('encodes a passed individual with decimal range', () => {
+            const sut = individualEncoder([{
+                name: 'name',
+                type: 'text',
+                values: 'abcd',
+                length: '3',
+            }]);
+
+            const actual = sut.encode({ name: 'dda' });
+
+            expect(actual).toEqual([0, 1, 1, 1, 1, 0, 0]);
+        });
     });
 });
