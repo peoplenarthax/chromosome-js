@@ -3,13 +3,14 @@ import { forAll } from 'testier';
 import IndividualBuilder from '../../__tests__/builders/IndividualBuilder';
 import { onePointCrossOver, twoPointCrossOver } from '../crossover';
 
+const noop = () => {};
 describe('onePointCrossOver', () => {
     it('performs a cross over on one point in the gene list ', () => {
         const ind1 = new IndividualBuilder().withFeatures([3, 2, 1]).build();
         const ind2 = new IndividualBuilder().withFeatures([4, 5, 6]).build();
         mockRandom(2 / 3);
 
-        const children = onePointCrossOver(ind1, ind2);
+        const children = onePointCrossOver(noop, ind1, ind2);
 
         expect(children).toEqual([
             expect.objectContaining({
@@ -29,7 +30,7 @@ describe('twoPointCrossOver', () => {
         const ind2 = new IndividualBuilder().withFeatures([12, 11, 10, 9, 8, 7]).build();
         mockRandom([2 / 6, 5.9 / 6]);
 
-        const children = twoPointCrossOver(ind1, ind2);
+        const children = twoPointCrossOver(noop, ind1, ind2);
 
         expect(children).toEqual([
             expect.objectContaining({
@@ -46,7 +47,7 @@ describe('twoPointCrossOver', () => {
         const ind2 = new IndividualBuilder().withFeatures([12, 11, 10, 9, 8, 7]).build();
         mockRandom([2 / 6, 2 / 6]);
 
-        const children = twoPointCrossOver(ind1, ind2);
+        const children = twoPointCrossOver(noop, ind1, ind2);
 
         expect(children).toEqual([
             expect.objectContaining({
@@ -69,7 +70,7 @@ describe('twoPointCrossOver', () => {
             const ind2 = new IndividualBuilder().withFeatures([4, 5, 6]).build();
             mockRandom([randomFixPoint1, randomFixPoint2]);
 
-            const children = twoPointCrossOver(ind1, ind2);
+            const children = twoPointCrossOver(noop, ind1, ind2);
 
             expect(children).toEqual([
                 expect.objectContaining({

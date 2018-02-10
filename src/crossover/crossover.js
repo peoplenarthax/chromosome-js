@@ -1,7 +1,7 @@
 import generateIndividual from '../population/Individual';
 import randomInRange from '../utils/random/randomInRange';
 
-export function onePointCrossOver({ features: features1, fitnessFunction }, { features: features2 }) {
+export function onePointCrossOver(fitnessFunction, { features: features1 }, { features: features2 }) {
     const fixCrossPoint = randomInRange(features1.length - 1);
 
     const featuresChild1 = [
@@ -18,7 +18,7 @@ export function onePointCrossOver({ features: features1, fitnessFunction }, { fe
     ];
 }
 
-export function twoPointCrossOver({ features: features1, fitnessFunction }, { features: features2 }) {
+export function twoPointCrossOver(fitnessFunction, { features: features1 }, { features: features2 }) {
     let fixCrossPoint1 = randomInRange(features1.length - 1);
     let fixCrossPoint2 = randomInRange(features1.length - 1);
 

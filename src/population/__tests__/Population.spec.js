@@ -5,13 +5,13 @@ describe('Population', () => {
     describe('constructor', () => {
         it('saves the individuals', () => {
             const actual = generatePopulation([
-                new IndividualBuilder().withoutFitnessFunction().build(),
-                new IndividualBuilder().withoutFitnessFunction().build(),
+                new IndividualBuilder().build(),
+                new IndividualBuilder().build(),
             ]);
 
             expect(actual).toEqual([
-                new IndividualBuilder().withoutFitnessFunction().build(),
-                new IndividualBuilder().withoutFitnessFunction().build(),
+                new IndividualBuilder().build(),
+                new IndividualBuilder().build(),
             ]);
         });
 
