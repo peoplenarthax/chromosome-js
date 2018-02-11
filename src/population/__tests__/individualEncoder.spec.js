@@ -11,6 +11,7 @@ describe('individualEncoder', () => {
                 name: 'age',
                 values: [0, 99],
                 bits: 7,
+                type: 'number',
                 position: 0,
             },
         }));
@@ -29,12 +30,14 @@ describe('individualEncoder', () => {
                 name: 'age',
                 values: [0, 99],
                 bits: 7,
+                type: 'number',
                 position: 0,
             },
             height: {
                 name: 'height',
                 values: [0, 178],
                 bits: 8,
+                type: 'number',
                 position: 1,
             },
         }));
@@ -88,7 +91,7 @@ describe('individualEncoder', () => {
             expect(actual).toEqual([0, 0, 0, 0, 1, 0, 0]);
         });
 
-        it.only('encodes a passed individual with decimal range', () => {
+        it('encodes a passed individual with decimal range', () => {
             const sut = individualEncoder([{
                 name: 'name',
                 type: 'text',

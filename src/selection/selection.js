@@ -36,7 +36,7 @@ const selectAndRemoveWinners = (removeWinners, population, selected) =>
             : population,
     });
 
-const generateTournament = tournamentSize => population =>
+const tournamentOf = tournamentSize => population =>
     Array(tournamentSize)
         .fill()
         .map((participant, index) =>
@@ -47,19 +47,18 @@ const generateTournament = tournamentSize => population =>
         .reduce((winner, ind) => (ind.fitness > winner.fitness ? ind : winner), { fitness: 0 });
 
 function tournament(amount, population, { tournamentSize = 2, removeWinners } = {}) {
-    const tournamentWith = generateTournament(tournamentSize);
-    const obj = reduce(
+    const { selected: selectedIndividuals } = reduce(
         ({ selected, availablePopulation }) =>
             compose(
                 selectAndRemoveWinners(removeWinners, availablePopulation, selected),
-                tournamentWith,
+                tournamentOf(tournamentSize),
             )(availablePopulation)
         ,
         { selected: [], availablePopulation: population },
         range(0, amount),
     );
 
-    return obj.selected;
+    return selectedIndividuals;
 }
 
 function roulette(amount, population) {
