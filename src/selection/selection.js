@@ -1,33 +1,12 @@
-import { takeLast, reverse, compose } from 'ramda';
-import randomInRange from '../utils/random/randomInRange';
-
-
-const rangeCheckedFunction = (...args) => {
-    if (args[0] > args[1].length) {
-        throw new RangeError('You cannot select more individuals than the population size');
-    }
-    return args[args.length - 1](...args);
-};
-
-const selectLast = amount => compose(
+import {
+    takeLast,
     reverse,
-    takeLast(amount),
-);
-const selectTournamentWinner = tournamentSize => population =>
-    Array(tournamentSize)
-        .fill()
-        .map((participant, index) =>
-            ({
-                ...population[randomInRange(population.length)],
-                index,
-            }))
-        .reduce((winner, ind) => (ind.fitness > winner.fitness ? ind : winner), { fitness: 0 });
-
-export const selectRandom = (...args) => rangeCheckedFunction(...args, random);
-export const selectBest = (...args) => rangeCheckedFunction(...args, best);
-export const selectWorst = (...args) => rangeCheckedFunction(...args, worst);
-export const selectByTournament = (...args) => rangeCheckedFunction(...args, tournament);
-export const selectRoulette = (...args) => rangeCheckedFunction(...args, roulette);
+    compose,
+    remove,
+    reduce,
+    range,
+} from 'ramda';
+import randomInRange from '../utils/random/randomInRange';
 
 function random(amount, population) {
     return [...new Array(amount)]
@@ -39,25 +18,48 @@ function best(amount, population) {
         .slice(0, amount);
 }
 
+const selectLast = amount => compose(
+    reverse,
+    takeLast(amount),
+);
+
 function worst(amount, population) {
     return selectLast(amount)(population);
 }
 
+// TOURNAMENT FUNCTIONS
+const selectAndRemoveWinners = (removeWinners, population, selected) =>
+    ({ index, ...selectedIndividual }) => ({
+        selected: [...selected, selectedIndividual],
+        availablePopulation: removeWinners
+            ? remove(index, 1, population)
+            : population,
+    });
+
+const generateTournament = tournamentSize => population =>
+    Array(tournamentSize)
+        .fill()
+        .map((participant, index) =>
+            ({
+                ...population[randomInRange(population.length)],
+                index,
+            }))
+        .reduce((winner, ind) => (ind.fitness > winner.fitness ? ind : winner), { fitness: 0 });
+
 function tournament(amount, population, { tournamentSize = 2, removeWinners } = {}) {
-    const selected = [];
-    const availablePopulation = population;
-    for (let k = 0; k < amount; k++) { // eslint-disable-line no-plusplus
-        const tournamentWinner = selectTournamentWinner(tournamentSize)(availablePopulation);
+    const tournamentWith = generateTournament(tournamentSize);
+    const obj = reduce(
+        ({ selected, availablePopulation }) =>
+            compose(
+                selectAndRemoveWinners(removeWinners, availablePopulation, selected),
+                tournamentWith,
+            )(availablePopulation)
+        ,
+        { selected: [], availablePopulation: population },
+        range(0, amount),
+    );
 
-        const { index, ...selectedIndividual } = tournamentWinner;
-        selected.push(selectedIndividual);
-
-        if (removeWinners) {
-            availablePopulation.splice(index, 1);
-        }
-    }
-
-    return selected;
+    return obj.selected;
 }
 
 function roulette(amount, population) {
@@ -74,3 +76,16 @@ function roulette(amount, population) {
 
     return selected;
 }
+
+const rangeCheckedFunction = (...args) => {
+    if (args[0] > args[1].length) {
+        throw new RangeError('You cannot select more individuals than the population size');
+    }
+    return args[args.length - 1](...args);
+};
+
+export const selectRandom = (...args) => rangeCheckedFunction(...args, random);
+export const selectBest = (...args) => rangeCheckedFunction(...args, best);
+export const selectWorst = (...args) => rangeCheckedFunction(...args, worst);
+export const selectByTournament = (...args) => rangeCheckedFunction(...args, tournament);
+export const selectRoulette = (...args) => rangeCheckedFunction(...args, roulette);
