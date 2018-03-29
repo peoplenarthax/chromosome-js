@@ -4,7 +4,7 @@ import IndividualBuilder from '../../__tests__/builders/IndividualBuilder';
 import { onePointCrossOver, twoPointCrossOver } from '../crossover';
 
 const noop = () => {};
-describe('onePointCrossOver', () => {
+describe.skip('onePointCrossOver', () => {
     it('performs a cross over on one point in the gene list ', () => {
         const ind1 = new IndividualBuilder().withFeatures([3, 2, 1]).build();
         const ind2 = new IndividualBuilder().withFeatures([4, 5, 6]).build();
@@ -24,7 +24,7 @@ describe('onePointCrossOver', () => {
     });
 });
 
-describe('twoPointCrossOver', () => {
+describe.skip('twoPointCrossOver', () => {
     it('performs a cross over on two points in the gene list ', () => {
         const ind1 = new IndividualBuilder().withFeatures([6, 5, 4, 3, 2, 1]).build();
         const ind2 = new IndividualBuilder().withFeatures([12, 11, 10, 9, 8, 7]).build();
