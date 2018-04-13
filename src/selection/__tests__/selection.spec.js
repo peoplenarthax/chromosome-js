@@ -1,6 +1,7 @@
 import { mockRandomForEach } from 'jest-mock-random';
 import PopulationBuilder from '../../__tests__/builders/PopulationBuilder';
 import {
+    selectPopulation,
     selectRandom,
     selectBest,
     selectWorst,
@@ -184,6 +185,14 @@ describe('Selection', () => {
             const actual = () => selectRoulette(4, population);
 
             expect(actual).toThrow(RangeError);
+        });
+    });
+    describe('selectPopulation', () => {
+        it('calls the selection function with the size, population and options passed', () => {
+            const selectionFn = jest.fn();
+            selectPopulation(selectionFn, 5, [1, 2, 3], { option: 'a' });
+
+            expect(selectionFn).toHaveBeenCalledWith(5, [1, 2, 3], { option: 'a' });
         });
     });
 });

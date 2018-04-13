@@ -88,3 +88,7 @@ export const selectBest = (...args) => rangeCheckedFunction(...args, best);
 export const selectWorst = (...args) => rangeCheckedFunction(...args, worst);
 export const selectByTournament = (...args) => rangeCheckedFunction(...args, tournament);
 export const selectRoulette = (...args) => rangeCheckedFunction(...args, roulette);
+
+export function selectPopulation(selection, size, population, options) {
+    return selection(size, population, options);
+}

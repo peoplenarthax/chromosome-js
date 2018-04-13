@@ -1,5 +1,5 @@
 import { times } from 'ramda';
-import generateIndividual from './Individual';
+import { generateIndividual } from './Individual';
 
 const byFitness = (a, b) => (a.fitness < b.fitness ? 1 : -1);
 

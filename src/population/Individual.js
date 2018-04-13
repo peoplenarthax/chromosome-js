@@ -7,26 +7,33 @@ import { applySpec, identity, flip, call, map } from 'ramda';
  */
 
 // const throwTypeError = (message) => { throw new TypeError(message); };
-// const errorIndividualEmpty = (...args) => { throw TypeError('Individual needs a chromosome genotype'); };
+// const errorIndividualEmpty = (...args) => { throw TypeError('Individual needs a genome genotype'); };
 // const errorFitnessEmpty = (...args) => { throw TypeError('Individual needs fitness function'); };
 
 
-export default function generateIndividual(genotype, fitnessFunction) {
-    if (!genotype) { throw TypeError('Individual needs a chromosome genotype'); }
+export function generateIndividual(genotype, fitnessFunction) {
+    if (!genotype) { throw TypeError('Individual needs a genome genotype'); }
     if (!fitnessFunction) { throw TypeError('Individual needs fitness function'); }
 
     if (typeof (genotype) === 'function') {
-        const chromosome = genotype();
+        const genome = genotype();
         return {
-            chromosome,
-            fitness: fitnessFunction(chromosome),
+            genome,
+            fitness: fitnessFunction(genome),
         };
     }
     const individual = applySpec({
-        chromosome: identity,
+        genome: identity,
         fitness: flip(call),
     });
-    const chromosome = map(call, genotype);
+    const genome = map(call, genotype);
 
-    return individual(chromosome, fitnessFunction);
+    return individual(genome, fitnessFunction);
+}
+
+export function generateIndividualWith(fitness) {
+    return genome => ({
+        genome,
+        fitness: fitness(genome),
+    });
 }

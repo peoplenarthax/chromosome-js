@@ -1,5 +1,5 @@
 import generatePopulation from '../Population';
-import generateIndividualMock from '../Individual';
+import { generateIndividual as generateIndividualMock } from '../Individual';
 
 jest.mock('../Individual');
 

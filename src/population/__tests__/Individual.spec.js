@@ -1,12 +1,12 @@
 import { forAll } from 'testier';
-import generateIndividual from '../Individual';
+import { generateIndividual, generateIndividualWith } from '../Individual';
 
 const CHROMOSOME_GENOTYPES = [
     {
         genotype: () => ([1, 2]),
         fitness: ([a, b]) => a + b,
         expected: {
-            chromosome: [1, 2],
+            genome: [1, 2],
             fitness: 3,
         },
     },
@@ -17,7 +17,7 @@ const CHROMOSOME_GENOTYPES = [
         },
         fitness: ({ a, b }) => a + b,
         expected: {
-            chromosome: {
+            genome: {
                 a: 1,
                 b: 2,
             },
@@ -31,7 +31,7 @@ const CHROMOSOME_GENOTYPES = [
         ],
         fitness: ([a, b]) => a + b,
         expected: {
-            chromosome: [1, 2],
+            genome: [1, 2],
             fitness: 3,
         },
     },
@@ -40,16 +40,16 @@ const CHROMOSOME_GENOTYPES = [
 describe('Individual', () => {
     describe('generateIndividual', () => {
         it('calls the fitness function with the passed features', () => {
-            const chromosomeGenotype = () => ([1, 2]);
+            const genomeGenotype = () => ([1, 2]);
             const fitnessFunction = jest.fn();
 
-            generateIndividual(chromosomeGenotype, fitnessFunction);
+            generateIndividual(genomeGenotype, fitnessFunction);
 
             expect(fitnessFunction).toHaveBeenCalledWith([1, 2]);
         });
 
         forAll(CHROMOSOME_GENOTYPES, ({ genotype, fitness, expected }) => {
-            it(`returns the individual with the generated chromosome and fitness if the chromosome genotype is ${genotype}`, () => {
+            it(`returns the individual with the generated genome and fitness if the genome genotype is ${genotype}`, () => {
                 const actual = generateIndividual(genotype, fitness);
 
                 expect(actual).toEqual(expected);
@@ -67,4 +67,17 @@ describe('Individual', () => {
             expect(actual).toThrow(TypeError);
         });
     });
+    describe('generateIndividualWith', () => {
+        it('returns a function that called with a genome generates an evaluated individual', () => {
+            const sumIndividual = generateIndividualWith(individual => individual.reduce((acc, val) => acc + val, 0));
+
+            const actual = sumIndividual([1, 2, 3, 4]);
+
+            expect(actual).toEqual({
+                genome: [1, 2, 3, 4],
+                fitness: 10,
+            });
+        });
+    });
 });
+

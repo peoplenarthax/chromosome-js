@@ -8,9 +8,9 @@ describe('Mutation', () => {
     describe('flipMutation', () => {
         mockRandomForEach([0.01, 0.5, 0.5]);
         it('flips randomly the feature bits if random under the passed threshold', () => {
-            const individual = IndividualBuilder.binaryIndividual([0b0, 0b1, 0b1]);
+            const genome = [0b0, 0b1, 0b1];
 
-            const actual = flipMutation(0.05, individual);
+            const actual = flipMutation(0.05, genome);
 
             expect(actual).toEqual([0b1, 0b1, 0b1]);
         });
@@ -25,7 +25,7 @@ describe('Mutation', () => {
         ], ({ range, expected }) => {
             it(`mutates to an int between ${range}`, () => {
                 const individual = new IndividualBuilder()
-                    .withFeatures([2, 5, 10])
+                    .withGenome([2, 5, 10])
                     .build();
 
                 const actual = intInRangeMutation(0.05, range, individual);
@@ -54,7 +54,7 @@ describe('Mutation', () => {
         ], ({ expected, solutionSpace }) => {
             it(`mutates to an int between ${solutionSpace}`, () => {
                 const individual = new IndividualBuilder()
-                    .withFeatures([2, 5.2, 'dda'])
+                    .withGenome([2, 5.2, 'dda'])
                     .build();
 
                 const actual = inRangeMutation(0.05, solutionSpace, individual);
