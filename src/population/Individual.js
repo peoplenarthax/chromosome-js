@@ -11,12 +11,12 @@ import { applySpec, identity, flip, call, map } from 'ramda';
 // const errorFitnessEmpty = (...args) => { throw TypeError('Individual needs fitness function'); };
 
 
-export default function generateIndividual(chromosomeGenerator, fitnessFunction) {
-    if (!chromosomeGenerator) { throw TypeError('Individual needs a chromosome genotype'); }
+export default function generateIndividual(genotype, fitnessFunction) {
+    if (!genotype) { throw TypeError('Individual needs a chromosome genotype'); }
     if (!fitnessFunction) { throw TypeError('Individual needs fitness function'); }
 
-    if (typeof (chromosomeGenerator) === 'function') {
-        const chromosome = chromosomeGenerator();
+    if (typeof (genotype) === 'function') {
+        const chromosome = genotype();
         return {
             chromosome,
             fitness: fitnessFunction(chromosome),
@@ -26,7 +26,7 @@ export default function generateIndividual(chromosomeGenerator, fitnessFunction)
         chromosome: identity,
         fitness: flip(call),
     });
-    const chromosome = map(call, chromosomeGenerator);
+    const chromosome = map(call, genotype);
 
     return individual(chromosome, fitnessFunction);
 }

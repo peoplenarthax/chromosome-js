@@ -1,42 +1,42 @@
 import generatePopulation from '../Population';
-import IndividualBuilder from '../../__tests__/builders/IndividualBuilder';
+import generateIndividualMock from '../Individual';
 
+jest.mock('../Individual');
+
+const giveFitnessPlusOne = () => {
+    let fitness = 0;
+
+    return () => {
+        fitness += 1;
+
+        return ({ fitness });
+    };
+};
+beforeAll(() => {
+    generateIndividualMock.mockClear();
+});
 describe('Population', () => {
     describe('constructor', () => {
         it('saves the individuals', () => {
-            const actual = generatePopulation([
-                new IndividualBuilder().build(),
-                new IndividualBuilder().build(),
-            ]);
+            const noop = () => {};
+            const actual = generatePopulation(noop, noop, 3);
 
-            expect(actual).toEqual([
-                new IndividualBuilder().build(),
-                new IndividualBuilder().build(),
-            ]);
+            expect(actual.length).toBe(3);
         });
 
-        it('ranks the individual by fitness', () => {
-            const actual = generatePopulation([
-                new IndividualBuilder().withFitness(1000).build(),
-                new IndividualBuilder().withFitness(4000).build(),
-                new IndividualBuilder().withFitness(50).build(),
-                new IndividualBuilder().withFitness(100).build(),
-            ]);
+        it('generate individuals with their correspondant fitness as many times as specified', () => {
+            const noop = () => {};
+            generatePopulation(noop, noop, 3);
 
-            expect(actual).toEqual([
-                expect.objectContaining({
-                    fitness: 4000,
-                }),
-                expect.objectContaining({
-                    fitness: 1000,
-                }),
-                expect.objectContaining({
-                    fitness: 100,
-                }),
-                expect.objectContaining({
-                    fitness: 50,
-                }),
-            ]);
+            expect(generateIndividualMock).toHaveBeenCalledTimes(3);
+        });
+
+        it('returns the individuals ranked by fitness', () => {
+            generateIndividualMock.mockImplementation(giveFitnessPlusOne());
+            const noop = () => {};
+            const actual = generatePopulation(noop, noop, 3);
+
+            expect(actual).toEqual([{ fitness: 3 }, { fitness: 2 }, { fitness: 1 }]);
         });
     });
 });
