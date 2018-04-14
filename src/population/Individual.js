@@ -6,10 +6,6 @@ import { applySpec, identity, flip, call, map } from 'ramda';
  * @abstract
  */
 
-// const throwTypeError = (message) => { throw new TypeError(message); };
-// const errorIndividualEmpty = (...args) => { throw TypeError('Individual needs a genome genotype'); };
-// const errorFitnessEmpty = (...args) => { throw TypeError('Individual needs fitness function'); };
-
 
 export function generateIndividual(genotype, fitnessFunction) {
     if (!genotype) { throw TypeError('Individual needs a genome genotype'); }
