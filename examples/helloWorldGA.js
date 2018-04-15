@@ -43,7 +43,7 @@ const printPopulationData = (generationNumber, population) => {
 
 const safePush = (value, list) => (list.length + 1 > POPULATION_SIZE ? list : append(value, list));
 const lengthStringEqualsAmount = amount => string => equals(length(string), amount);
-const randomChar = () => String.fromCharCode(randomInRange(32, 130));
+const randomChar = () => String.fromCharCode(randomInRange(0, 255)); //32. 130 reduced space
 const addRandomChar = string => (string + randomChar());
 const generateRandomStringOf = amount => () => until(lengthStringEqualsAmount(amount), addRandomChar)('');
 

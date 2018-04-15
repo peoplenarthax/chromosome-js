@@ -5,8 +5,6 @@ import { applySpec, identity, flip, call, map } from 'ramda';
  * and a fitness function
  * @abstract
  */
-
-
 export function generateIndividual(genotype, fitnessFunction) {
     if (!genotype) { throw TypeError('Individual needs a genome genotype'); }
     if (!fitnessFunction) { throw TypeError('Individual needs fitness function'); }
