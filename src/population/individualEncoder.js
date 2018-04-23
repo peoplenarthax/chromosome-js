@@ -1,5 +1,7 @@
 import isDecimal from '../utils/numbers/NumberUtils';
 
+
+// UNUSED
 const toInteger = decimal => parseInt(
     decimal.toString().split('.').join(''),
     10,

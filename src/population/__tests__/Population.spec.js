@@ -32,6 +32,7 @@ describe('Population', () => {
         });
 
         it('returns the individuals ranked by fitness', () => {
+            // Mock full answer of times(...) so I test in an isolated way the sorting
             generateIndividualMock.mockImplementation(giveFitnessPlusOne());
             const noop = () => {};
             const actual = generatePopulation(noop, noop, 3);

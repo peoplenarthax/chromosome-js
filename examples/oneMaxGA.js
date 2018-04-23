@@ -1,4 +1,4 @@
-// Example of usage without auto runner
+// Example of usage without auto runner Run build before executing them by the moment
 const generatePopulation = require('../dist/population/Population').default;
 const { generateIndividualWith } = require('../dist/population/Individual');
 const {
@@ -12,6 +12,7 @@ const { selectByTournament, selectPopulation, selectBest } = require('../dist/se
 const { onePointCrossOver } = require('../dist/crossover/crossover');
 const { flipMutation } = require('../dist/mutation/mutation');
 
+// TODO: Create class genetic algorithm with lifecycle and builder parameters.
 const MAX_N_GENERATIONS = 999;
 const POPULATION_SIZE = 100;
 const CROSSOVER_PROB = 0.50;
@@ -50,34 +51,26 @@ const sortByFitness = sort(byFitness);
 
 // Generate Population only runs X times the given genotype to generate individuals
 let generationNumber = 0;
-// console.time('initPop');
+// TODO: Init population as web worker
 const initPopulation = generatePopulation(genotype, fitness, POPULATION_SIZE);
-// console.timeEnd('initPop');
 
 printPopulationData(generationNumber, initPopulation);
-// console.time('clone');
 let population = clone(initPopulation);
-// console.timeEnd('clone');
 
-// console.time('fullCycle');
 for (
     generationNumber = 1;
     generationNumber < MAX_N_GENERATIONS && population[0].fitness < SIZE_IND;
     generationNumber += 1
 ) {
     let newPopulation = [...selectPopulation(selectBest, 30, population)]; // Saving best individual
-    // console.time('selectMutate');
+    // TODO: Next generation as web worker
     while (newPopulation.length < POPULATION_SIZE) {
-        // console.time('tournament');
         const [parent1, parent2] = selectPopulation(selectByTournament, 2, population, { tournamentSize: 10 });
-        // console.timeEnd('tournament');
 
         if (Math.random() < CROSSOVER_PROB) {
             let [child1, child2] = onePointCrossOver(parent1, parent2);
-            // console.time('flip');
-            child1 = flipMutation(MUTATION_PROBABILITY, child1);
-            // console.timeEnd('flip');
 
+            child1 = flipMutation(MUTATION_PROBABILITY, child1);
             child2 = flipMutation(MUTATION_PROBABILITY, child2);
 
             newPopulation = safePush(generateOneMaxIndividual(child1), newPopulation);
@@ -87,13 +80,8 @@ for (
             newPopulation = safePush(parent2, newPopulation);
         }
     }
-    // console.timeEnd('selectMutate');
-
-    // console.time('sort');
     population = sortByFitness(newPopulation);
-    // console.timeEnd('sort');
 }
-// console.timeEnd('fullCycle');
 
 
 printPopulationData(generationNumber, population);
