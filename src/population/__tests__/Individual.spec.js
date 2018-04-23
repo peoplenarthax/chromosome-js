@@ -1,23 +1,59 @@
-import generateIndividual from '../Individual';
+import { forAll } from 'testier';
+import { generateIndividual, generateIndividualWith } from '../Individual';
+
+const CHROMOSOME_GENOTYPES = [
+    {
+        genotype: () => ([1, 2]),
+        fitness: ([a, b]) => a + b,
+        expected: {
+            genome: [1, 2],
+            fitness: 3,
+        },
+    },
+    {
+        genotype: {
+            a: () => 1,
+            b: () => 2,
+        },
+        fitness: ({ a, b }) => a + b,
+        expected: {
+            genome: {
+                a: 1,
+                b: 2,
+            },
+            fitness: 3,
+        },
+    },
+    {
+        genotype: [
+            () => 1,
+            () => 2,
+        ],
+        fitness: ([a, b]) => a + b,
+        expected: {
+            genome: [1, 2],
+            fitness: 3,
+        },
+    },
+];
 
 describe('Individual', () => {
-    describe('constructor', () => {
+    describe('generateIndividual', () => {
         it('calls the fitness function with the passed features', () => {
-            const features = [1, 2];
+            const genomeGenotype = () => ([1, 2]);
             const fitnessFunction = jest.fn();
 
-            generateIndividual(features, fitnessFunction);
+            generateIndividual(genomeGenotype, fitnessFunction);
 
-            expect(fitnessFunction).toHaveBeenCalledWith(features);
+            expect(fitnessFunction).toHaveBeenCalledWith([1, 2]);
         });
-        it('returns the fitness calculated by the fitness function and the features', () => {
-            const square = [1, 2];
-            const sum = ([sideA, sideB]) => sideA + sideB;
 
-            const sut = generateIndividual(square, sum);
-            const actual = sut.fitness;
+        forAll(CHROMOSOME_GENOTYPES, ({ genotype, fitness, expected }) => {
+            it(`returns the individual with the generated genome and fitness if the genome genotype is ${genotype}`, () => {
+                const actual = generateIndividual(genotype, fitness);
 
-            expect(actual).toBe(3);
+                expect(actual).toEqual(expected);
+            });
         });
         it('throws an error in case features are not provided', () => {
             const actual = () => generateIndividual(null, () => {});
@@ -31,4 +67,17 @@ describe('Individual', () => {
             expect(actual).toThrow(TypeError);
         });
     });
+    describe('generateIndividualWith', () => {
+        it('returns a function that called with a genome generates an evaluated individual', () => {
+            const sumIndividual = generateIndividualWith(individual => individual.reduce((acc, val) => acc + val, 0));
+
+            const actual = sumIndividual([1, 2, 3, 4]);
+
+            expect(actual).toEqual({
+                genome: [1, 2, 3, 4],
+                fitness: 10,
+            });
+        });
+    });
 });
+
