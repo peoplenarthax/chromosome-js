@@ -1,5 +1,5 @@
 import { forAll } from 'testier';
-import { generateIndividual, generateIndividualWith } from '../Individual';
+import { generateIndividual, generateIndividualWith } from '../individual';
 
 const CHROMOSOME_GENOTYPES = [
     {
