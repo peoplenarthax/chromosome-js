@@ -17,20 +17,20 @@ const mutateFeature = (dimensions, position, feature) => {
     }
 };
 
-export function flipMutation(mutationProbability, { features }) {
-    return features
+export function flipMutation(mutationProbability, genome) {
+    return genome
         .map(gene => ((Math.random() < mutationProbability) ? gene ^ 1 : gene));
 }
 
-export function intInRangeMutation(mutationProbability, range, { features }) {
-    return features
+export function intInRangeMutation(mutationProbability, range, { genome }) {
+    return genome
         .map(feature => ((Math.random() < mutationProbability)
             ? randomInRange(...range)
             : feature));
 }
 
-export function inRangeMutation(mutationProbability, dimensions, { features }) {
-    return features
+export function inRangeMutation(mutationProbability, dimensions, { genome }) {
+    return genome
         .map(((feature, position) => ((Math.random() < mutationProbability)
             ? mutateFeature(dimensions, position, feature)
             : feature)));

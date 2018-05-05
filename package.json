@@ -44,6 +44,9 @@
     "testier": "^1.0.0-alpha3"
   },
   "dependencies": {
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
     "ramda": "^0.25.0"
   }
 }
