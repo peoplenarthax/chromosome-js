@@ -1,7 +1,7 @@
 // Example of usage without auto runner Run build before executing them by the moment
 // Check oneMaxGA for Technical TODOs
-const generatePopulation = require('../dist/population/Population').default;
-const { generateIndividualWith } = require('../dist/population/Individual');
+const generatePopulation = require('../dist/population/population').default;
+const { generateIndividualWith } = require('../dist/population/individual');
 const {
     __,
     append,

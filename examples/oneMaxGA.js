@@ -1,6 +1,6 @@
 // Example of usage without auto runner Run build before executing them by the moment
-const generatePopulation = require('../dist/population/Population').default;
-const { generateIndividualWith } = require('../dist/population/Individual');
+const generatePopulation = require('../dist/population/population').default;
+const { generateIndividualWith } = require('../dist/population/individual');
 const {
     append,
     clone,
@@ -11,6 +11,7 @@ const randomInRange = require('../dist/utils/random/randomInRange').default;
 const { selectByTournament, selectPopulation, selectBest } = require('../dist/selection/selection');
 const { onePointCrossOver } = require('../dist/crossover/crossover');
 const { flipMutation } = require('../dist/mutation/mutation');
+
 
 // TODO: Create class genetic algorithm with lifecycle and builder parameters.
 const MAX_N_GENERATIONS = 999;

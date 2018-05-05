@@ -1,7 +1,7 @@
-import generatePopulation from '../Population';
-import { generateIndividual as generateIndividualMock } from '../Individual';
+import { generateIndividual as generateIndividualMock } from '../individual';
+import generatePopulation from '../population';
 
-jest.mock('../Individual');
+jest.mock('../individual');
 
 const giveFitnessPlusOne = () => {
     let fitness = 0;
