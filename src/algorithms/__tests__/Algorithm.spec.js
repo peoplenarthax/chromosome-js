@@ -1,4 +1,4 @@
-import AlgorithmConstants from '../Algorithm';
+import { AlgorithmConstants } from '../Algorithm';
 
 describe('Algorithm', () => {
     describe('AlgorithmConstants', () => {
