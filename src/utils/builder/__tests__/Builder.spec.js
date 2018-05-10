@@ -41,4 +41,27 @@ describe('Builder', () => {
             });
         });
     });
+
+    describe('Required fields builder', () => {
+        it('builds a normal object if all the required fields are fulfil', () => {
+            const NameAndAgeBuilder = new Builder({ '*name': 'Silly name', age: 23 });
+
+            const actual = NameAndAgeBuilder
+                .withName('The expected name')
+                .build();
+
+            expect(actual).toEqual({
+                name: 'The expected name',
+                age: 23,
+            });
+        });
+
+        it('throws an error if a required field is missing', () => {
+            const NameAndAgeBuilder = new Builder({ '*name': 'Silly name', age: 23 });
+
+            const actual = () => NameAndAgeBuilder.build();
+
+            expect(actual).toThrow(TypeError);
+        });
+    });
 });
