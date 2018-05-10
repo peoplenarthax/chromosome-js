@@ -24,7 +24,10 @@ export default class Builder {
         Object.assign(this, initialProps);
 
         Object.keys(initialProps).forEach((prop) => {
+            // const propertyName = prop;
+            // if(propertyName.startsWith())
             const [initialLetter, ...rest] = prop;
+
             const funcName = `${initialLetter.toUpperCase()}${rest.join('')}`;
 
             this[`with${funcName}`] = withFunctionFor(prop).bind(this);
