@@ -44,6 +44,7 @@
     "jest-mock-random": "^1.0.1",
     "lint-staged": "^8.0.4",
     "onchange": "^5.1.0",
+    "@babel/core": "^7.1.6",
     "testier": "^1.0.0-alpha3"
   },
   "dependencies": {
