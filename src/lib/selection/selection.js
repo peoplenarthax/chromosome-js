@@ -28,32 +28,27 @@ function worst(amount, population) {
 }
 
 // TOURNAMENT FUNCTIONS
-const selectAndRemoveWinners = (removeWinners, population, selected) =>
-    ({ index, ...selectedIndividual }) => ({
-        selected: [...selected, selectedIndividual],
-        availablePopulation: removeWinners
-            ? remove(index, 1, population)
-            : population,
-    });
+const selectAndRemoveWinners = (removeWinners, population, selected) => ({ index, ...selectedIndividual }) => ({
+    selected: [...selected, selectedIndividual],
+    availablePopulation: removeWinners
+        ? remove(index, 1, population)
+        : population,
+});
 
-const tournamentOf = tournamentSize => population =>
-    Array(tournamentSize)
-        .fill()
-        .map((participant, index) =>
-            ({
-                ...population[randomInRange(population.length)],
-                index,
-            }))
-        .reduce((winner, ind) => (ind.fitness > winner.fitness ? ind : winner), { fitness: 0 });
+const tournamentOf = tournamentSize => population => Array(tournamentSize)
+    .fill()
+    .map((participant, index) => ({
+        ...population[randomInRange(population.length)],
+        index,
+    }))
+    .reduce((winner, ind) => (ind.fitness > winner.fitness ? ind : winner), { fitness: 0 });
 
 function tournament(amount, population, { tournamentSize = 2, removeWinners } = {}) {
     const { selected: selectedIndividuals } = reduce(
-        ({ selected, availablePopulation }) =>
-            compose(
-                selectAndRemoveWinners(removeWinners, availablePopulation, selected),
-                tournamentOf(tournamentSize),
-            )(availablePopulation)
-        ,
+        ({ selected, availablePopulation }) => compose(
+            selectAndRemoveWinners(removeWinners, availablePopulation, selected),
+            tournamentOf(tournamentSize),
+        )(availablePopulation),
         { selected: [], availablePopulation: population },
         range(0, amount),
     );

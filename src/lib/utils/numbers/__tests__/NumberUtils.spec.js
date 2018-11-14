@@ -9,10 +9,9 @@ describe('isDecimal', () => {
         { value: 123, expected: false },
         { value: 1.11, expected: true },
         { value: 123123123, expected: false },
-    ], ({ value, expected }) =>
-        it(`asserts if ${value} is decimal or not`, () => {
-            const actual = isDecimal(value);
+    ], ({ value, expected }) => it(`asserts if ${value} is decimal or not`, () => {
+        const actual = isDecimal(value);
 
-            expect(actual).toBe(expected);
-        }));
+        expect(actual).toBe(expected);
+    }));
 });

@@ -1,4 +1,6 @@
-import { ifElse, concat, compose, splitAt, head, last, map, keys, values, tail, zipObj } from 'ramda';
+import {
+    ifElse, concat, compose, splitAt, head, last, map, keys, values, tail, zipObj,
+} from 'ramda';
 import randomInRange from '../utils/random/randomInRange';
 
 const hasLength = ([someValue]) => !!someValue.length || someValue.length === 0;
