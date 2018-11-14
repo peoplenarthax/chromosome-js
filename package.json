@@ -31,10 +31,13 @@
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-3": "^6.24.1",
+    "del": "^3.0.0",
     "eslint": "^4.6.1",
     "eslint-config-airbnb-base": "^12.0.2",
     "eslint-import-resolver-alias": "^1.0.3",
     "eslint-plugin-import": "2.7.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
     "husky": "^0.14.3",
     "jest": "^21.0.0",
     "jest-babel": "^1.0.1",
@@ -44,9 +47,6 @@
     "testier": "^1.0.0-alpha3"
   },
   "dependencies": {
-    "del": "^3.0.0",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^7.0.1",
     "ramda": "^0.25.0"
   }
 }
