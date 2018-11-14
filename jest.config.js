@@ -6,8 +6,12 @@ module.exports = {
         'src',
     ],
     collectCoverageFrom: [
-        '**/__tests__/**/*.spec.js',
+        '**/*.{js,jsx}',
     ],
+    coveragePathIgnorePatterns: [
+        'src/index.js',
+    ],
+    coverageDirectory: '../coverage',
     testRegex: 'spec.js$',
 
 };
