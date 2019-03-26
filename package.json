@@ -10,6 +10,7 @@
   "author": "Angel Paredes Barato",
   "license": "MIT",
   "scripts": {
+    "check-types": "tsc",
     "test": "jest",
     "lint": "eslint \"src/**/*.js\"",
     "lint-fix-all": "eslint --fix \"src/**/*.js\" \"tests/**/*.js\"",
@@ -32,6 +33,7 @@
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
     "@babel/preset-typescript": "^7.3.3",
+    "@types/jest": "^24.0.11",
     "@types/node": "^11.11.8",
     "@types/ramda": "^0.26.5",
     "babel-cli": "^6.26.0",
@@ -50,7 +52,8 @@
     "jest-mock-random": "^1.0.1",
     "lint-staged": "^8.0.4",
     "onchange": "^5.1.0",
-    "testier": "^1.0.0-alpha3"
+    "testier": "^1.0.0-alpha3",
+    "ts-jest": "^24.0.0"
   },
   "dependencies": {
     "ramda": "^0.25.0",

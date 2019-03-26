@@ -1,4 +1,4 @@
-export default function randomInRange(lower, upper) {
+export default function randomInRange(lower : number, upper?: number) : number{
     if (!upper && upper !== 0) {
         return Math.round(Math.random() * lower);
     }
