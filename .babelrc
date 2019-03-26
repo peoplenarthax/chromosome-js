@@ -8,7 +8,8 @@
                 }
             }
         ],
-        "stage-3"
+        "stage-3",
+        "@babel/typescript"
     ],
     "env": {
         "test": {
@@ -21,10 +22,13 @@
                         }
                     }
                 ],
-                "stage-3"
+                "stage-3",
+                "@babel/typescript"
             ],
             "plugins": [
-                "transform-es2015-modules-commonjs"
+                "transform-es2015-modules-commonjs",
+                "@babel/proposal-class-properties",
+                "@babel/proposal-object-rest-spread"
             ]
         }
     }
