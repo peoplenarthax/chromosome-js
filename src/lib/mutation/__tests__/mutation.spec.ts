@@ -1,6 +1,5 @@
 import { mockRandomForEach } from 'jest-mock-random';
-import { forAll } from 'testier';
-import IndividualBuilder from '../../__tests__/builders/IndividualBuilder';
+import { forAll } from '../../utils/test/forall';
 import { flipMutation, intInRangeMutation } from '../mutation';
 
 describe('Mutation', () => {
@@ -17,17 +16,15 @@ describe('Mutation', () => {
 
     describe('intInRangeMutation', () => {
         mockRandomForEach([0.01, 0.6, 0.5, 0.5]);
-        forAll([
+        forAll<{range: [number, number], expected: number[]}>([
             { range: [0, 10], expected: [6, 5, 10] },
             { range: [3, 10], expected: [7, 5, 10] },
             { range: [-5, 10], expected: [4, 5, 10] },
         ], ({ range, expected }) => {
             it(`mutates to an int between ${range}`, () => {
-                const individual = new IndividualBuilder()
-                    .withGenome([2, 5, 10])
-                    .build();
 
-                const actual = intInRangeMutation(0.05, range, individual);
+
+                const actual = intInRangeMutation(range)(0.05, [2, 5, 10]);
 
                 expect(actual).toEqual(expected);
             });

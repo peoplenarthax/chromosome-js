@@ -1,7 +1,13 @@
 module.exports = {
     resetMocks: true,
     rootDir: 'src',
+    globals: {
+        'ts-jest': {
+            babelConfig: true,
+        },
+    },
     transform: {
+        '^.+\\.js?$': 'babel-jest', // Adding this line solved the issue
         '^.+\\.ts?$': 'ts-jest',
     },
     moduleDirectories: [
@@ -15,6 +21,6 @@ module.exports = {
         'src/index.js',
     ],
     coverageDirectory: '../coverage',
-    testRegex: 'spec.{js|ts}$',
+    testRegex: 'spec.ts$',
 
 };

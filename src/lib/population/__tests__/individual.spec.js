@@ -1,4 +1,4 @@
-import { forAll } from 'testier';
+import { forAll } from '../../utils/test/forall';
 import { generateIndividual, generateIndividualWith } from '../individual';
 
 const CHROMOSOME_GENOTYPES = [
