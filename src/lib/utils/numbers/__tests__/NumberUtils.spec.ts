@@ -1,4 +1,4 @@
-import { forAll } from '../../utils/test/forall';
+import { forAll } from '../../test/forall';
 import isDecimal from '../NumberUtils';
 
 describe('isDecimal', () => {
