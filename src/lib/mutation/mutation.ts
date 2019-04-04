@@ -1,6 +1,6 @@
 import randomInRange from '../utils/random/randomInRange';
-import {Genome} from "../__tests__/builders/IndividualBuilder";
 import {map} from 'ramda';
+import {Genome} from '../population/individual';
 
 export type MutationFunction = (probability: number, genome: Genome) => Genome
 

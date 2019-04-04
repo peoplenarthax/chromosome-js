@@ -1,9 +1,5 @@
 import { createBuilder } from '../../utils/builder/Builder'
-export type Genome = any[] | { [k: string] : any}
-export interface Individual {
-    genome: Genome,
-    fitness: number
-}
+import {Individual} from '@/lib/population/individual';
 
 export const IndividualBuilder = () =>
     createBuilder<Individual>({

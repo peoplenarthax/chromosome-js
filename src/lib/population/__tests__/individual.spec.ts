@@ -1,10 +1,10 @@
 import { forAll } from '../../utils/test/forall';
-import { generateIndividual, generateIndividualWith } from '../individual';
+import {FitnessFunction, generateIndividual, generateIndividualWith, Genotype, Individual} from '../individual';
 
-const CHROMOSOME_GENOTYPES = [
+const CHROMOSOME_GENOTYPES : { genotype: Genotype, fitness: FitnessFunction, expected: Individual}[] = [
     {
         genotype: () => ([1, 2]),
-        fitness: ([a, b]) => a + b,
+        fitness: ([a, b] : any) => a + b,
         expected: {
             genome: [1, 2],
             fitness: 3,
@@ -15,7 +15,7 @@ const CHROMOSOME_GENOTYPES = [
             a: () => 1,
             b: () => 2,
         },
-        fitness: ({ a, b }) => a + b,
+        fitness: (({ a, b } : {a: number, b: number}) => a + b) as any,
         expected: {
             genome: {
                 a: 1,
@@ -29,7 +29,7 @@ const CHROMOSOME_GENOTYPES = [
             () => 1,
             () => 2,
         ],
-        fitness: ([a, b]) => a + b,
+        fitness: ([a, b] : any) => a + b,
         expected: {
             genome: [1, 2],
             fitness: 3,
@@ -56,12 +56,14 @@ describe('Individual', () => {
             });
         });
         it('throws an error in case features are not provided', () => {
+            // @ts-ignore
             const actual = () => generateIndividual(null, () => {});
 
             expect(actual).toThrow(TypeError);
         });
 
         it('throws an error in case features are not provided', () => {
+            // @ts-ignore
             const actual = () => generateIndividual({}, null);
 
             expect(actual).toThrow(TypeError);
@@ -69,7 +71,7 @@ describe('Individual', () => {
     });
     describe('generateIndividualWith', () => {
         it('returns a function that called with a genome generates an evaluated individual', () => {
-            const sumIndividual = generateIndividualWith(individual => individual.reduce((acc, val) => acc + val, 0));
+            const sumIndividual = generateIndividualWith(individual => individual.reduce((acc: number, val: number) => acc + val, 0));
 
             const actual = sumIndividual([1, 2, 3, 4]);
 
