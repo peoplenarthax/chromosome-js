@@ -5,6 +5,11 @@ export type BuilderInterface<T> = {
     build(): T
 }
 
+/**
+ * Create a builder object with the given a template.
+ * It uses the template to set defaults,
+ * if a nested object is to be modified, the whole object must be defined
+ */
 export function createBuilder<T>(template?: T): BuilderInterface<T> {
     const _blueprint: any = template ? Object.assign({}, template) : {}
     const builder = new Proxy(

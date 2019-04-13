@@ -7,9 +7,7 @@ import {
     range,
 } from 'ramda';
 import randomInRange from '../utils/random/randomInRange';
-import {
-    Individual
-} from '../__tests__/builders/IndividualBuilder';
+import {Individual} from "@/lib/population/individual";
 
 type SelectionFunction = (amount: number, population: Individual[], options ? : any) => Individual[]
 
@@ -33,15 +31,16 @@ const worst: SelectionFunction = (amount, population) => {
 type IndexedIndividual = {
     index: number
 } & Individual
+
 // TOURNAMENT FUNCTIONS
-const selectAndRemoveWinners = (removeWinners: boolean, population: Individual[], selected: Individual[]) => ({
-                                                                                                                  index,
-                                                                                                                  ...selectedIndividual
-                                                                                                              }: IndexedIndividual) => ({
-    selected: [...selected, selectedIndividual],
-    availablePopulation: removeWinners ?
-        remove(index, 1, population) : population,
-});
+const selectAndRemoveWinners = (removeWinners: boolean, population: Individual[], selected: Individual[]) =>
+    ({ index, ...selectedIndividual }: IndexedIndividual) =>
+        ({
+            selected: [...selected, selectedIndividual],
+            availablePopulation: removeWinners
+                ? remove(index, 1, population)
+                : population,
+        });
 
 const tournamentOf = (tournamentSize: number) => (population: Individual[]): IndexedIndividual => Array(tournamentSize)
     .fill(undefined)
@@ -102,6 +101,7 @@ const roulette : SelectionFunction = (amount, population) => {
     return selected;
 };
 
+// Function to check if we are trying to select more individuals than the one available in the population
 const rangeCheckedFunction : any= (...args : any[]) => {
     if (args[0] > args[1].length) {
         throw new RangeError('You cannot select more individuals than the population size');
@@ -109,10 +109,26 @@ const rangeCheckedFunction : any= (...args : any[]) => {
     return args[args.length - 1](...args);
 };
 
+// Randomly give you N individuals
 export const selectRandom : SelectionFunction = (...args) => rangeCheckedFunction(...args, random);
+
+// Select the N first individuals sorted by fitness
 export const selectBest : SelectionFunction = (...args) => rangeCheckedFunction(...args, best);
+
+// Select the N last individuals sorted by fitness
 export const selectWorst: SelectionFunction = (...args) => rangeCheckedFunction(...args, worst);
+
+/*
+ * Selects N individuals randomly from the population and only the best one of them
+ * gets selected
+ * Select N individuals by performing tournaments of X size
+ */
 export const selectByTournament : SelectionFunction = (...args) => rangeCheckedFunction(...args, tournament);
+
+/*
+* Selects N using roulette algorithm where a individual's possibility to be chosen
+* is proporcional to his fitness in comparison with the total fitness of the population
+*/
 export const selectRoulette : SelectionFunction = (...args) => rangeCheckedFunction(...args, roulette);
 
 export const selectPopulation = (selection: SelectionFunction, size: number, population: Individual[], options: any) => {

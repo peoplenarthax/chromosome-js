@@ -12,10 +12,12 @@ type GenotypeFunction = () => any
 export type Genotype = GenotypeFunction | {[k: string]: GenotypeFunction} | GenotypeFunction[]
 export type FitnessFunction = (genome: Genome) => number
 /**
- * Individual represents a possible solution in the problem space.
- * Population is a list of individuals. Every individual has features
- * and a fitness function
- * @abstract
+ * Individual represents a possible solution in the problem space
+ *
+ * Genotype: Function or object with functions that once executed
+ * generate one probable individual genome
+ * Fitness: Function that given a genome can give a numerical value
+ * that correlates with how good the genome solves the problem
  */
 export const generateIndividual = (genotype: Genotype, fitnessFunction: FitnessFunction ) : Individual => {
     if (!genotype) { throw TypeError('Individual needs a genotype'); }
@@ -39,9 +41,9 @@ export const generateIndividual = (genotype: Genotype, fitnessFunction: FitnessF
 
 export type IndividualGenerator = (genome: Genome) => Individual
 
-export const generateIndividualWith = (fitness: FitnessFunction) : IndividualGenerator => {
-    return (genome: Genome) => ({
+// Sames as generateIndividual but curryfied with the fitness first
+export const generateIndividualWith = (fitness: FitnessFunction) : IndividualGenerator => (genome: Genome) => ({
         genome,
         fitness: fitness(genome),
     });
-}
+

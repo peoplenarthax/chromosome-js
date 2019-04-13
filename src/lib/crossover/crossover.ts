@@ -2,7 +2,7 @@ import {
     ifElse, concat, compose, splitAt, head, last, map, keys, values, tail, zipObj,
 } from 'ramda';
 import randomInRange from '../utils/random/randomInRange';
-import { Genome} from '../__tests__/builders/IndividualBuilder';
+import {Genome} from "@/lib/population/individual";
 
 const hasLength = (genomes : Genome[]) => !!genomes[0].length || genomes[0].length === 0;
 
@@ -26,7 +26,11 @@ const swapAndZip = (genomeKeys : string[], index: number) => compose(
     swapAt(index),
     map(values),
 );
-
+/*
+* This swap and zip is needed since when individuals are objects
+* we first treat it as an array and then we need to make an object
+* out of it with the same fields
+*/
 const switchObject = (collection: {[k: string]: any}[]) => {
     const genomeKeys = keys(head(collection)) as string[];
     const fixCrossPoint = randomInRange(genomeKeys.length - 1);
@@ -34,6 +38,7 @@ const switchObject = (collection: {[k: string]: any}[]) => {
     return swapAndZip(genomeKeys, fixCrossPoint)(collection);
 };
 
+// Swaps 2 arrays given a fixed point
 export const onePointCrossOver : CrossoverFunction = (genome1, genome2) => {
 
     return ifElse(
