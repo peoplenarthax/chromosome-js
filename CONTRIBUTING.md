@@ -39,6 +39,20 @@ To build run:
 yarn run build
 ```
 
+### Contribute 
+
+#### Documentation
+
+Do you know about Genetic Algorithms and want to explain some concept? Are you eager to help us improve the language that we use? Do you have any doubt or something that we could make clearer? Please open an issue starting with ```[Documentation]```
+
+#### Utils
+
+You can help ChromosomeJS to extend the utils functions library, define a better API to interact with it or simply make a feature request. Just open an issue starting with ```[Utils]```.
+
+#### Framework
+
+To help ChromosomeJS offer a more performant framework, improve the API, extend it to fit other Evolutionary Algorithms you could start by opening an issue starting with ```[Framework]```.
+
 ### Submitting a Pull Request
 
 For non-trivial changes, please open an issue with a proposal for a new feature or refactoring before starting on the work. We don’t want you to waste your efforts on a pull request that we won’t want to accept.
