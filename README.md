@@ -1,3 +1,5 @@
+Meet us in [Gitter](https://gitter.im/ChromosomeJS/community)
+
 # ChromosomeJS 🐒
 
 A small library to help curious people to develop their own Genetic Algorithms. 
