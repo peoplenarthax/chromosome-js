@@ -1,4 +1,4 @@
-Meet us in [Gitter](https://gitter.im/ChromosomeJS/community)
+[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/ChromosomeJS/community)
 
 # ChromosomeJS 🐒
 
