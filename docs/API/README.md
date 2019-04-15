@@ -8,7 +8,7 @@ APIs other functional libraries have (e.g Ramda). So it does not rely on
 general variables, they do not have side effects and all of them return a value
 always. One think to consider is that a lot of the methods in this API rely
 heavily in randomness and hence they are not deterministic (may not return the
-same value twice with the same input). Rather this functions are easy to compose.
+same value twice with the same input). Rather this functions are easy to compose.git s
 
 ?> If you do not understand something, maybe is better to take a look at the [Vocabulary](http://localhost:3000/#/guides/?id=vocabulary) first.
 ## Utils
