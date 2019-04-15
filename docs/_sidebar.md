@@ -1,6 +1,6 @@
 <!-- docs/_sidebar.md -->
 
 * [Home](/)
-* [API](/api/)
+* [API](/library/)
 * [Guides](/guides/)
 
