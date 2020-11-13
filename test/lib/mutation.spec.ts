@@ -1,6 +1,6 @@
 import { mockRandomForEach } from 'jest-mock-random';
-import { forAll } from '../../utils/test/forall';
-import { flipMutation, intInRangeMutation } from '../mutation';
+import { forAll } from '../forall';
+import { flipMutation, intInRangeMutation } from '../../src/lib/mutation';
 
 describe('Mutation', () => {
     describe('flipMutation', () => {
@@ -16,14 +16,12 @@ describe('Mutation', () => {
 
     describe('intInRangeMutation', () => {
         mockRandomForEach([0.01, 0.6, 0.5, 0.5]);
-        forAll<{range: [number, number], expected: number[]}>([
+        forAll<{ range: [number, number], expected: number[] }>([
             { range: [0, 10], expected: [6, 5, 10] },
             { range: [3, 10], expected: [7, 5, 10] },
             { range: [-5, 10], expected: [4, 5, 10] },
         ], ({ range, expected }) => {
             it(`mutates to an int between ${range}`, () => {
-
-
                 const actual = intInRangeMutation(range)(0.05, [2, 5, 10]);
 
                 expect(actual).toEqual(expected);

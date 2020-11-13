@@ -7,7 +7,7 @@ import {
     selectWorst,
     selectByTournament,
     selectRoulette,
-} from '../selection';
+} from '../../src/lib/selection';
 
 describe('Selection', () => {
     describe('selectRandom', () => {

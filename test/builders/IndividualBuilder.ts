@@ -1,5 +1,5 @@
-import { createBuilder } from '../../utils/builder/Builder'
-import {Individual} from '@/lib/population/individual';
+import { createBuilder } from '../../src/utils/builder'
+import { Individual } from '../../src/lib/population';
 
 export const IndividualBuilder = () =>
     createBuilder<Individual>({

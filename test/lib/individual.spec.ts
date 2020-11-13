@@ -1,10 +1,10 @@
-import { forAll } from '../../utils/test/forall';
-import {FitnessFunction, generateIndividual, generateIndividualWith, Genotype, Individual} from '../individual';
+import { forAll } from '../forall';
+import { FitnessFunction, generateIndividual, generateIndividualWith, Genotype, Individual } from '../../src/lib/population';
 
-const CHROMOSOME_GENOTYPES : { genotype: Genotype, fitness: FitnessFunction, expected: Individual}[] = [
+const CHROMOSOME_GENOTYPES: { genotype: Genotype, fitness: FitnessFunction, expected: Individual }[] = [
     {
         genotype: () => ([1, 2]),
-        fitness: ([a, b] : any) => a + b,
+        fitness: ([a, b]: any) => a + b,
         expected: {
             genome: [1, 2],
             fitness: 3,
@@ -15,7 +15,7 @@ const CHROMOSOME_GENOTYPES : { genotype: Genotype, fitness: FitnessFunction, exp
             a: () => 1,
             b: () => 2,
         },
-        fitness: (({ a, b } : {a: number, b: number}) => a + b) as any,
+        fitness: (({ a, b }: { a: number, b: number }) => a + b) as any,
         expected: {
             genome: {
                 a: 1,
@@ -29,7 +29,7 @@ const CHROMOSOME_GENOTYPES : { genotype: Genotype, fitness: FitnessFunction, exp
             () => 1,
             () => 2,
         ],
-        fitness: ([a, b] : any) => a + b,
+        fitness: ([a, b]: any) => a + b,
         expected: {
             genome: [1, 2],
             fitness: 3,
@@ -57,7 +57,7 @@ describe('Individual', () => {
         });
         it('throws an error in case features are not provided', () => {
             // @ts-ignore
-            const actual = () => generateIndividual(null, () => {});
+            const actual = () => generateIndividual(null, () => { });
 
             expect(actual).toThrow(TypeError);
         });
