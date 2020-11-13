@@ -45,14 +45,17 @@
     }
   ],
   "devDependencies": {
+    "@babel/preset-typescript": "^7.12.1",
     "@size-limit/preset-small-lib": "^4.7.0",
+    "@types/ramda": "^0.27.32",
     "husky": "^4.3.0",
+    "jest-mock-random": "^1.1.1",
     "size-limit": "^4.7.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.0.3",
     "typescript": "^4.0.5"
   },
   "dependencies": {
-    "jest-mock-random": "^1.1.1"
+    "ramda": "^0.27.1"
   }
 }

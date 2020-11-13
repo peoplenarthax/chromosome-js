@@ -1,4 +1,4 @@
-import { forAll } from '../forall';
+import { forAll } from '../test/forAll';
 import { mockRandomForEach } from 'jest-mock-random';
 import { randomInRange } from '../../src/utils/random';
 

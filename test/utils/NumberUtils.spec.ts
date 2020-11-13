@@ -1,5 +1,5 @@
-import { forAll } from '../forall';
-import isDecimal from '../../src/utils/numbers/NumberUtils';
+import { forAll } from '../test/forAll';
+import { isDecimal } from '../../src/utils/numbers';
 
 describe('isDecimal', () => {
     forAll<{ value: number, expected: boolean }>([

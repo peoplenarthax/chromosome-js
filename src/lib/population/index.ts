@@ -53,7 +53,7 @@ const byFitness = (a: Individual, b: Individual) => (a.fitness < b.fitness ? 1 :
 /**
 * Maybe Population is not needed
 */
-export default (genotype: Genotype, fitness: FitnessFunction, size: number) => {
+export const generatePopulation = (genotype: Genotype, fitness: FitnessFunction, size: number) => {
     return times(() => generateIndividual(genotype, fitness), size)
         .sort(byFitness);
 }

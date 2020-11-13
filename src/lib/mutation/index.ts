@@ -1,4 +1,4 @@
-import randomInRange from '../utils/random/randomInRange';
+import { randomInRange } from '../../utils/random';
 import { map } from 'ramda';
 import { Genome } from '../population';
 
@@ -12,7 +12,7 @@ export const flipMutation = (mutationProbability: number, genome: number[]): num
 
 // Get a new random number from a range
 export const intInRangeMutation = (range: [number, number]) => (mutationProbability: number, genome: number[]) => {
-    return map(feature => ((Math.random() < mutationProbability)
+    return map((feature: number) => ((Math.random() < mutationProbability)
         ? randomInRange(...range) : feature))(genome)
 }
 

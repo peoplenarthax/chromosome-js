@@ -1,5 +1,5 @@
 import { mockRandom, resetMockRandom } from 'jest-mock-random';
-import { forAll } from '../forall';
+import { forAll } from '../test/forAll';
 import { onePointCrossOver, twoPointCrossOver } from '../../src/lib/crossover';
 
 describe('onePointCrossOver', () => {

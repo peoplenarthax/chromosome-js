@@ -2,12 +2,7 @@
   // see https://www.typescriptlang.org/tsconfig to better understand tsconfigs
   "include": [
     "src",
-    "types",
-    "test/utils/randomInRange.spec.ts",
-    "test/builders/utils/selection.spec.js",
-    "test/builders/utils/individual.spec.ts",
-    "test/builders/utils/mutation.spec.ts",
-    "test/builders/utils/crossover.spec.ts"
+    "types"
   ],
   "compilerOptions": {
     "module": "esnext",

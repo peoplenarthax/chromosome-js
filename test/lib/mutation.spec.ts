@@ -1,5 +1,5 @@
 import { mockRandomForEach } from 'jest-mock-random';
-import { forAll } from '../forall';
+import { forAll } from '../test/forAll';
 import { flipMutation, intInRangeMutation } from '../../src/lib/mutation';
 
 describe('Mutation', () => {

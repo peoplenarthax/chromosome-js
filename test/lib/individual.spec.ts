@@ -1,4 +1,4 @@
-import { forAll } from '../forall';
+import { forAll } from '../test/forAll';
 import { FitnessFunction, generateIndividual, generateIndividualWith, Genotype, Individual } from '../../src/lib/population';
 
 const CHROMOSOME_GENOTYPES: { genotype: Genotype, fitness: FitnessFunction, expected: Individual }[] = [
