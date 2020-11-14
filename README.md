@@ -1,4 +1,4 @@
-[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/ChromosomeJS/community)
+![npm bundle size (version)](https://img.shields.io/bundlephobia/minzip/chromosome-js/0.1.0)
 
 # ChromosomeJS 🐒
 
