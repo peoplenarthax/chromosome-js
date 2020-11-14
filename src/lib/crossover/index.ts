@@ -1,10 +1,10 @@
 import {
     ifElse, concat, compose, splitAt, head, last, map, keys, values, tail, zipObj,
 } from 'ramda';
-import randomInRange from '../utils/random/randomInRange';
-import {Genome} from "@/lib/population/individual";
+import { randomInRange } from '../../utils/random';
+import { Genome } from "../population";
 
-const hasLength = (genomes : Genome[]) => !!genomes[0].length || genomes[0].length === 0;
+const hasLength = (genomes: Genome[]) => !!genomes[0].length || genomes[0].length === 0;
 
 type CrossoverFunction = (genome1: Genome, genome2: Genome) => [Genome, Genome]
 
@@ -20,8 +20,8 @@ const swapAt = (index: number) => (arrays: any[]) => {
     return [child1, child2];
 };
 
-const zipKeys = (attributes : string[]) => (value: any) => zipObj(attributes, value);
-const swapAndZip = (genomeKeys : string[], index: number) => compose(
+const zipKeys = (attributes: string[]) => (value: any) => zipObj(attributes, value);
+const swapAndZip = (genomeKeys: string[], index: number) => compose(
     map(zipKeys(genomeKeys)),
     swapAt(index),
     map(values),
@@ -31,7 +31,7 @@ const swapAndZip = (genomeKeys : string[], index: number) => compose(
 * we first treat it as an array and then we need to make an object
 * out of it with the same fields
 */
-const switchObject = (collection: {[k: string]: any}[]) => {
+const switchObject = (collection: { [k: string]: any }[]) => {
     const genomeKeys = keys(head(collection)) as string[];
     const fixCrossPoint = randomInRange(genomeKeys.length - 1);
 
@@ -39,7 +39,7 @@ const switchObject = (collection: {[k: string]: any}[]) => {
 };
 
 // Swaps 2 arrays given a fixed point
-export const onePointCrossOver : CrossoverFunction = (genome1, genome2) => {
+export const onePointCrossOver: CrossoverFunction = (genome1, genome2) => {
 
     return ifElse(
         hasLength,
@@ -49,7 +49,7 @@ export const onePointCrossOver : CrossoverFunction = (genome1, genome2) => {
     )([genome1, genome2]);
 };
 
-const swapFor = (...indexes : number[]) => (list: any[]) : any => {
+const swapFor = (...indexes: number[]) => (list: any[]): any => {
     if (indexes.length === 0) { return list; }
 
     // TODO: Give proper types to this
@@ -57,13 +57,13 @@ const swapFor = (...indexes : number[]) => (list: any[]) : any => {
     return swapFor(...tail(indexes))(swapAt(head(indexes))(list));
 };
 
-const swapForAndZip = (genomeKeys : string[], indexes: [number, number]) => compose(
+const swapForAndZip = (genomeKeys: string[], indexes: [number, number]) => compose(
     map(zipKeys(genomeKeys)),
     swapFor(...indexes),
     map(values),
 );
 
-const getRandomFixPoints = (length : number) : [number, number] => {
+const getRandomFixPoints = (length: number): [number, number] => {
     const fixCrossPoint1 = length === 3 ? 1 : randomInRange(length - 1);
     const fixCrossPoint2 = length === 3 ? 2 : randomInRange(fixCrossPoint1 + 1, length - 1);
 
@@ -72,14 +72,14 @@ const getRandomFixPoints = (length : number) : [number, number] => {
         fixCrossPoint2,
     ];
 };
-const switchObjectTwice = (collection: [{ [k: string] : any}, { [k: string] : any}]) => {
+const switchObjectTwice = (collection: [{ [k: string]: any }, { [k: string]: any }]) => {
     const genomeKeys = keys(head(collection)) as string[];
     const fixCrossPoints = getRandomFixPoints(genomeKeys.length);
 
     return swapForAndZip(genomeKeys, fixCrossPoints)(collection);
 };
 
-export const twoPointCrossOver : CrossoverFunction = (genome1, genome2) => {
+export const twoPointCrossOver: CrossoverFunction = (genome1, genome2) => {
     const fixCrossPoints = getRandomFixPoints(genome1.length);
 
     return ifElse(

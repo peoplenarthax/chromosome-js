@@ -1,7 +1,7 @@
 /**
  * Generate a random number within 2 limits, if second arguments is not pass it is between 0 and this number
  */
-export default function randomInRange(lower : number, upper?: number) : number{
+export const randomInRange = (lower: number, upper?: number): number => {
     if (!upper && upper !== 0) {
         return Math.round(Math.random() * lower);
     }
