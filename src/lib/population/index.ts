@@ -1,6 +1,4 @@
-import {
-    applySpec, identity, flip, call, map, times
-} from 'ramda';
+import { mapObjIndexed } from '../../utils/functional';
 
 export type Genome = any[] | { [k: string]: any }
 export interface Individual {
@@ -31,13 +29,13 @@ export const generateIndividual = (genotype: Genotype, fitnessFunction: FitnessF
             fitness: fitnessFunction(genome),
         };
     }
-    const individual = applySpec<Individual>({
-        genome: identity,
-        fitness: flip(call),
-    });
-    const genome = map(call, genotype as any);
 
-    return individual(genome, fitnessFunction);
+    const genome = mapObjIndexed(fn => fn(), genotype as any);
+
+    return {
+        genome,
+        fitness: fitnessFunction(genome)
+    }
 }
 
 export type IndividualGenerator = (genome: Genome) => Individual
@@ -54,6 +52,11 @@ const byFitness = (a: Individual, b: Individual) => (a.fitness < b.fitness ? 1 :
 * Maybe Population is not needed
 */
 export const generatePopulation = (genotype: Genotype, fitness: FitnessFunction, size: number) => {
-    return times(() => generateIndividual(genotype, fitness), size)
-        .sort(byFitness);
+    let population = new Array(size)
+
+    for (let i = 0; i < size; i++) {
+        population[i] = generateIndividual(genotype, fitness)
+    }
+
+    return population.sort(byFitness)
 }
