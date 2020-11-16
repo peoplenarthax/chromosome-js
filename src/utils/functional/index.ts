@@ -1,6 +1,6 @@
 
 // TODO: Fix any type for array / object switch
-export const mapObjIndexed= <T>(fn: (value: any, index: string | number | symbol, obj: T) => T, obj: T) : T => {
+export const mapObjIndexed= <T>(fn: (value: any, index: string | number | symbol, obj: T) => any, obj: T) : T => {
 	if (Array.isArray(obj)) return obj.map(fn as any) as any
 	
 	return Object.keys(obj).reduce((acc: Partial<T>, key: string) => {
