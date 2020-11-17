@@ -46,7 +46,7 @@ export const generateIndividualWith = (fitness: FitnessFunction): IndividualGene
     fitness: fitness(genome),
 });
 
-const byFitness = (a: Individual, b: Individual) => (a.fitness < b.fitness ? 1 : -1);
+export const byFitness = (a: Individual, b: Individual) => (a.fitness < b.fitness ? 1 : -1);
 
 /**
 * Maybe Population is not needed

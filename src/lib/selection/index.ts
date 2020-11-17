@@ -1,94 +1,68 @@
-import {
-    takeLast,
-    reverse,
-    compose,
-    remove,
-    reduce,
-    range,
-} from 'ramda';
 import { randomInRange } from '../../utils/random';
-import { Individual } from "../population";
+import { Individual, byFitness } from "../population";
 
-type SelectionFunction = (amount: number, population: Individual[], options?: any) => Individual[]
+interface SelectionFunction<T = {}> { (amount: number, population: Individual[], options?: T) : Individual[] }
 
-const random: SelectionFunction = (amount, population) => {
-    return [...new Array(amount)]
-        .map(() => population[randomInRange(population.length - 1)]);
+// Function to check if we are trying to select more individuals than the one available in the population
+const checkRange = (selectAmount: number, population: any[]) => {
+    if (selectAmount > population.length) {
+        throw new RangeError('You cannot select more individuals than the population size');
+    }
 };
 
-const best: SelectionFunction = (amount, population) => {
-    return population
-        .slice(0, amount);
+// Randomly give you N individuals
+export const selectRandom: SelectionFunction = (amount, population) => {
+    checkRange(amount, population);
+
+    return Array.from({length: amount}, () => population[randomInRange(population.length - 1)])
 };
 
-const worst: SelectionFunction = (amount, population) => {
-    return compose<Individual[], Individual[], Individual[]>(
-        reverse,
-        takeLast(amount),
-    )(population)
+// Select the N first individuals sorted by fitness
+export const selectBest: SelectionFunction = (amount, population) => {
+    checkRange(amount, population);
+
+    return population.slice(0, amount);
 };
 
-type IndexedIndividual = {
-    index: number
-} & Individual
+// Select the N last individuals sorted by fitness
+export const selectWorst: SelectionFunction = (amount, population) => {
+    checkRange(amount, population);
 
-// TOURNAMENT FUNCTIONS
-const selectAndRemoveWinners = (removeWinners: boolean, population: Individual[], selected: Individual[]) =>
-    ({ index, ...selectedIndividual }: IndexedIndividual) =>
-        ({
-            selected: [...selected, selectedIndividual],
-            availablePopulation: removeWinners
-                ? remove(index, 1, population)
-                : population,
-        });
+    return population.slice(-amount).reverse()
+};
 
-const tournamentOf = (tournamentSize: number) => (population: Individual[]): IndexedIndividual => Array(tournamentSize)
-    .fill(undefined)
-    .map((__, index) => ({
-        ...population[randomInRange(population.length)],
-        index,
-    }))
-    .reduce((winner, ind) => (ind.fitness > winner.fitness ? ind : winner), {
-        fitness: 0
-    } as IndexedIndividual);
-
-type TournamentObject = {
-    selected: Individual[],
-    availablePopulation: Individual[]
-}
-const tournament: SelectionFunction = (amount, population, {
-    tournamentSize,
-    removeWinners
-}: {
-    tournamentSize: number,
-    removeWinners: boolean
+/*
+ * Select N individuals by performing tournaments of X size
+ */
+type TournamentOptions = { tournamentSize: number }
+export const selectByTournament: SelectionFunction<TournamentOptions> = (amount, population, {
+    tournamentSize
 } = {
-        tournamentSize: 2,
-        removeWinners: false
+        tournamentSize: 2
     }) => {
-    const {
-        selected: selectedIndividuals
-    } = reduce(
-        ({
-            selected,
-            availablePopulation
-        }: TournamentObject) =>
-            compose<Individual[], IndexedIndividual, TournamentObject>(
-                selectAndRemoveWinners(removeWinners, availablePopulation, selected),
-                tournamentOf(tournamentSize),
-            )(availablePopulation), {
-                selected: [],
-                availablePopulation: population
-            } as TournamentObject,
-        range(0, amount),
-    );
+        checkRange(amount, population);
 
-    return selectedIndividuals;
+        let winners = []
+
+        while (winners.length < amount) {
+            const participants = selectRandom(tournamentSize, population).sort(byFitness)
+
+            winners.push(participants[0])
+        }
+
+        return winners;
 };
 
-const roulette: SelectionFunction = (amount, population) => {
+/*
+* Selects N using roulette algorithm where a individual's possibility to be chosen
+* is proporcional to his fitness in comparison with the total fitness of the population
+*/
+export const selectRoulette: SelectionFunction = (amount, population) => {
+    checkRange(amount, population)
+
     const maxFitness = population[0].fitness;
     let selected: Individual[] = [];
+    
     for (let k = 0; k < amount; k++) { // eslint-disable-line no-plusplus
         let index;
         while (true) { // eslint-disable-line no-constant-condition
@@ -100,36 +74,6 @@ const roulette: SelectionFunction = (amount, population) => {
 
     return selected;
 };
-
-// Function to check if we are trying to select more individuals than the one available in the population
-const rangeCheckedFunction: any = (...args: any[]) => {
-    if (args[0] > args[1].length) {
-        throw new RangeError('You cannot select more individuals than the population size');
-    }
-    return args[args.length - 1](...args);
-};
-
-// Randomly give you N individuals
-export const selectRandom: SelectionFunction = (...args) => rangeCheckedFunction(...args, random);
-
-// Select the N first individuals sorted by fitness
-export const selectBest: SelectionFunction = (...args) => rangeCheckedFunction(...args, best);
-
-// Select the N last individuals sorted by fitness
-export const selectWorst: SelectionFunction = (...args) => rangeCheckedFunction(...args, worst);
-
-/*
- * Selects N individuals randomly from the population and only the best one of them
- * gets selected
- * Select N individuals by performing tournaments of X size
- */
-export const selectByTournament: SelectionFunction = (...args) => rangeCheckedFunction(...args, tournament);
-
-/*
-* Selects N using roulette algorithm where a individual's possibility to be chosen
-* is proporcional to his fitness in comparison with the total fitness of the population
-*/
-export const selectRoulette: SelectionFunction = (...args) => rangeCheckedFunction(...args, roulette);
 
 export const selectPopulation = (selection: SelectionFunction, size: number, population: Individual[], options: any) => {
     return selection(size, population, options);

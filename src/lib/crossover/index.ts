@@ -11,11 +11,8 @@ type CrossoverFunction = (genome1: Genome, genome2: Genome) => [Genome, Genome]
 const swapAt = (index: number) => (arrays: any[]) => {
     const arraySplitted = arrays.map(splitAt(index));
 
-    // TODO: Give proper types to this
-    // @ts-ignore
-    const child1 = concat(head(head(arraySplitted)), last(last(arraySplitted)));
-    // @ts-ignore
-    const child2 = concat(head(last(arraySplitted)), last(head(arraySplitted)));
+    const child1 = [...arraySplitted[0], ...arraySplitted[1]]
+    const child2 = [...arraySplitted[1], ...arraySplitted[0]]
 
     return [child1, child2];
 };
