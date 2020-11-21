@@ -1,5 +1,5 @@
+import { mapObjIndexed } from '../../utils/functional';
 import { randomInRange } from '../../utils/random';
-import { map } from 'ramda';
 import { Genome } from '../population';
 
 export type MutationFunction = (probability: number, genome: Genome) => Genome
@@ -12,8 +12,8 @@ export const flipMutation = (mutationProbability: number, genome: number[]): num
 
 // Get a new random number from a range
 export const intInRangeMutation = (range: [number, number]) => (mutationProbability: number, genome: number[]) => {
-    return map((feature: number) => ((Math.random() < mutationProbability)
-        ? randomInRange(...range) : feature))(genome)
+    return mapObjIndexed((feature: number) => ((Math.random() < mutationProbability)
+        ? randomInRange(...range) : feature), genome)
 }
 
 

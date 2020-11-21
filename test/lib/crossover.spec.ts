@@ -38,9 +38,9 @@ describe('twoPointCrossOver', () => {
             const children = twoPointCrossOver(
                 [6, 5, 4, 3, 2, 1], [12, 11, 10, 9, 8, 7]
             );
-
+            
             expect(children).toEqual(expected);
-            resetMockRandom();
+            resetMockRandom();  
         });
     });
 

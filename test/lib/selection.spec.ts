@@ -113,23 +113,6 @@ describe('Selection', () => {
                 }),
             ]);
         });
-        it('gives the best individual from the random tournament selecting only once each individual if option passed', () => {
-            const { population } = generatePopulationWithIndividuals(10);
-
-            const actual = selectByTournament(3, population, { tournamentSize: 3, removeWinners: true });
-
-            expect(actual).toEqual([
-                expect.objectContaining({
-                    fitness: 10,
-                }),
-                expect.objectContaining({
-                    fitness: 9,
-                }),
-                expect.objectContaining({
-                    fitness: 8,
-                }),
-            ]);
-        });
         it('throws an error when the requested amount is bigger than the population', () => {
             const { population } = generatePopulationWithIndividuals(3);
 
