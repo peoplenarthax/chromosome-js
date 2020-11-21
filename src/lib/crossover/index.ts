@@ -1,87 +1,54 @@
-import {
-    ifElse, concat, compose, splitAt, head, last, map, keys, values, tail, zipObj,
-} from 'ramda';
 import { randomInRange } from '../../utils/random';
 import { Genome } from "../population";
 
-const hasLength = (genomes: Genome[]) => !!genomes[0].length || genomes[0].length === 0;
-
 type CrossoverFunction = (genome1: Genome, genome2: Genome) => [Genome, Genome]
+const splitAt = (index: number) => (array: any[]) => [array.slice(0, index), array.slice(index)]
 
-const swapAt = (index: number) => (arrays: any[]) => {
+const swapAt = (index: number) => (arrays: [any[], any[]]) => {
     const arraySplitted = arrays.map(splitAt(index));
 
-    const child1 = [...arraySplitted[0], ...arraySplitted[1]]
-    const child2 = [...arraySplitted[1], ...arraySplitted[0]]
+    const child1 = [...arraySplitted[0][0], ...arraySplitted[1][1]]
+    const child2 = [...arraySplitted[1][0], ...arraySplitted[0][1]]
 
     return [child1, child2];
 };
 
-const zipKeys = (attributes: string[]) => (value: any) => zipObj(attributes, value);
-const swapAndZip = (genomeKeys: string[], index: number) => compose(
-    map(zipKeys(genomeKeys)),
-    swapAt(index),
-    map(values),
-);
-/*
-* This swap and zip is needed since when individuals are objects
-* we first treat it as an array and then we need to make an object
-* out of it with the same fields
-*/
-const switchObject = (collection: { [k: string]: any }[]) => {
-    const genomeKeys = keys(head(collection)) as string[];
-    const fixCrossPoint = randomInRange(genomeKeys.length - 1);
 
-    return swapAndZip(genomeKeys, fixCrossPoint)(collection);
+// Get 2 points within an array length one after the other
+const getRandomFixPoints = (length: number, amount: number): number[] => {
+    if (length < 1) {
+        throw new RangeError("The number of fix points should be at least 1")
+    }
+
+    let fixCrossPoints = [randomInRange(length - 1)]
+
+    for (let i = 1; i < amount; i++) {
+        fixCrossPoints.push(randomInRange(fixCrossPoints[i - 1] + 1, length - 1))
+    }
+
+    return fixCrossPoints;
 };
 
-// Swaps 2 arrays given a fixed point
-export const onePointCrossOver: CrossoverFunction = (genome1, genome2) => {
+// Function that will create X amount of fix points and do cross over of 2 individuals over them
+export const xPointCrossOver= (x: number) : CrossoverFunction => (genome1, genome2) => {
+    let children = [genome1, genome2]
 
-    return ifElse(
-        hasLength,
-        // @ts-ignore
-        swapAt(randomInRange(genome1.length - 1)),
-        switchObject,
-    )([genome1, genome2]);
+    if (!Array.isArray(genome1)) {
+        children = children.map(Object.entries)
+    }
+
+    const fixCrossPoints = getRandomFixPoints(children[0].length, x);
+    for (let crosspointIndex = 0; crosspointIndex < fixCrossPoints.length; crosspointIndex++) {
+        children = swapAt(fixCrossPoints[crosspointIndex])(children as [any[], any[]])
+      }
+
+    if (Array.isArray(genome1)) {
+        return children as [Genome, Genome]
+    }
+    
+    return children.map(Object.fromEntries as any) as [Genome, Genome]
 };
 
-const swapFor = (...indexes: number[]) => (list: any[]): any => {
-    if (indexes.length === 0) { return list; }
+export const twoPointCrossOver = xPointCrossOver(2)
 
-    // TODO: Give proper types to this
-    // @ts-ignore
-    return swapFor(...tail(indexes))(swapAt(head(indexes))(list));
-};
-
-const swapForAndZip = (genomeKeys: string[], indexes: [number, number]) => compose(
-    map(zipKeys(genomeKeys)),
-    swapFor(...indexes),
-    map(values),
-);
-
-const getRandomFixPoints = (length: number): [number, number] => {
-    const fixCrossPoint1 = length === 3 ? 1 : randomInRange(length - 1);
-    const fixCrossPoint2 = length === 3 ? 2 : randomInRange(fixCrossPoint1 + 1, length - 1);
-
-    return [
-        fixCrossPoint1,
-        fixCrossPoint2,
-    ];
-};
-const switchObjectTwice = (collection: [{ [k: string]: any }, { [k: string]: any }]) => {
-    const genomeKeys = keys(head(collection)) as string[];
-    const fixCrossPoints = getRandomFixPoints(genomeKeys.length);
-
-    return swapForAndZip(genomeKeys, fixCrossPoints)(collection);
-};
-
-export const twoPointCrossOver: CrossoverFunction = (genome1, genome2) => {
-    const fixCrossPoints = getRandomFixPoints(genome1.length);
-
-    return ifElse(
-        hasLength,
-        swapFor(...fixCrossPoints),
-        switchObjectTwice,
-    )([genome1, genome2]);
-};
+export const onePointCrossOver = xPointCrossOver(1)
