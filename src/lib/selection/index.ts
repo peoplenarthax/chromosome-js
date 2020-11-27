@@ -1,7 +1,7 @@
 import { randomInRange } from '../../utils/random';
 import { Individual, byFitness } from "../population";
 
-interface SelectionFunction<T = {}> { (amount: number, population: Individual[], options?: T) : Individual[] }
+export interface SelectionFunction<T = {}> { (amount: number, population: Individual[], options?: T) : Individual[] }
 
 // Function to check if we are trying to select more individuals than the one available in the population
 const checkRange = (selectAmount: number, population: any[]) => {
