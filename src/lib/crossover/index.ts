@@ -1,7 +1,7 @@
 import { randomInRange } from '../../utils/random';
 import { Genome } from "../population";
 
-type CrossoverFunction = (genome1: Genome, genome2: Genome) => [Genome, Genome]
+export type CrossoverFunction = (genome1: Genome, genome2: Genome) => [Genome, Genome]
 const splitAt = (index: number) => (array: any[]) => [array.slice(0, index), array.slice(index)]
 
 const swapAt = (index: number) => (arrays: [any[], any[]]) => {

@@ -8,7 +8,7 @@ export interface Individual {
 
 type GenotypeFunction = () => any
 export type Genotype = GenotypeFunction | { [k: string]: GenotypeFunction } | GenotypeFunction[]
-export type FitnessFunction = (genome: Genome) => number
+export type FitnessFunction = (genome: Genome) => number | Individual
 
 /**
  * Individual represents a possible solution in the problem space
@@ -26,7 +26,7 @@ export const generateIndividual = (genotype: Genotype, fitnessFunction: FitnessF
         const genome = genotype();
         return {
             genome,
-            fitness: fitnessFunction(genome),
+            fitness: fitnessFunction(genome) as number,
         };
     }
 
@@ -34,7 +34,7 @@ export const generateIndividual = (genotype: Genotype, fitnessFunction: FitnessF
 
     return {
         genome,
-        fitness: fitnessFunction(genome)
+        fitness: fitnessFunction(genome) as number
     }
 }
 
@@ -43,7 +43,7 @@ export type IndividualGenerator = (genome: Genome) => Individual
 // Sames as generateIndividual but curryfied with the fitness first
 export const generateIndividualWith = (fitness: FitnessFunction): IndividualGenerator => (genome: Genome) => ({
     genome,
-    fitness: fitness(genome),
+    fitness: fitness(genome) as number,
 });
 
 export const byFitness = (a: Individual, b: Individual) => (a.fitness < b.fitness ? 1 : -1);
@@ -56,6 +56,16 @@ export const generatePopulation = (genotype: Genotype, fitness: FitnessFunction,
 
     for (let i = 0; i < size; i++) {
         population[i] = generateIndividual(genotype, fitness)
+    }
+
+    return population.sort(byFitness)
+}
+
+export const generatePopulationWithValidation = (genotype: () => Individual, size: number) => {
+    let population = new Array(size)
+
+    for (let i = 0; i < size; i++) {
+        population[i] = genotype()
     }
 
     return population.sort(byFitness)
