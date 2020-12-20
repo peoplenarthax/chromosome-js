@@ -28,27 +28,28 @@ ChromosomeJS offers a serie of utility functions to help out with different part
 
 #### Individual Generation and Population Generation
 
-- ```generateIndividual``` - Given a genotype and a fitness function it will return an evaluated individual
-- ```generateIndividualWith``` - Returns a function that only requires a chromosome/genotype to get an individual
-- ```generatePopulation``` - Given a genotype, fitness and a number of individuals it will create a first generation
+- ```generateIndividual - (genotype: Genotype, fitnessFunction: FitnessFunction): Individual``` - Given a genotype and a fitness function it will return an evaluated individual
+- ```generateIndividualWith - (fitness: FitnessFunction): IndividualGenerator``` - Returns a function that only requires a chromosome/genotype to get an individual
+- ```generatePopulation -  (genotype: Genotype, fitness: FitnessFunction, size: number) => Individual[]``` - Given a genotype, fitness and a number of individuals it will create a first generation
 
-#### Crossover
+#### Crossover `CrossoverFunction = (genome1: Genome, genome2: Genome) => [Genome, Genome]`
 
-- ```onePointCrossover``` - Two individuals generate two offsprings by swapping values at a random point.
-- ```twoPointCrossover``` - Same as one point crossover but with two points
+- ```xPointCrossover - (x: number) => CrossoverFunction``` - Create X amount of fixed points and swap values between 2 individuals 
+- ```onePointCrossover - CrossoverFunction``` - Two individuals generate two offsprings by swapping values at a random point.
+- ```twoPointCrossover - CrossoverFunction``` - Same as one point crossover but with two points
 
-#### Mutation
+#### Mutation `MutationFunction = (probability: number, genome: Genome) => Genome`
 
-- ```flipMutation``` - Flips bit from true to false and viceversa
-- ```intInRangeMutation``` - Generate a new integer within the genotype limits
+- ```flipMutation - MutationFunction``` - Flips bit from true to false and viceversa
+- ```intInRangeMutation - MutationFunction``` - Generate a new integer within the genotype limits
 
-#### Selection
+#### Selection `SelectionFunction = (amount: number, population: Individual[], options?: object) : Individual[]`
 
-- ```random``` - Get individuals randomly from the population
-- ```best``` - Get X individuals from the best ones of the population
-- ```worst``` - Get X individuals from the worst ones of the population
-- ```tournament``` - Select N random individuals from the population and select the best one of those, will be done as many times as individuals are required.
-- ```roulette``` - Choose individuals by the proportion of their fitness to the total fitness, so individuals with higher fitness have more chances to be selected.
+- ```selectRandom``` - Get individuals randomly from the population
+- ```selectBest``` - Get X individuals from the best ones of the population
+- ```selectWorst``` - Get X individuals from the worst ones of the population
+- ```selectByTournament - `options: {tournamentSize}` ``` - Select N random individuals from the population and select the best one of those, will be done as many times as individuals are required.
+- ```selectRoulette``` - Choose individuals by the proportion of their fitness to the total fitness, so individuals with higher fitness have more chances to be selected.
 
 ### How to contribute?
 You can help ChromosomeJS to extend the utils functions library, define a better API to interact with it or simply make a feature request. Just open an issue starting with ```[Utils]```.
@@ -57,7 +58,13 @@ You can help ChromosomeJS to extend the utils functions library, define a better
 
 ## Chromosome Framework
 __The framework is under development__
-ChromosomeJS also makes easy to 'plug-n-play', so we just choose/define our genetic algorithm and it will take care of run it for you interacting through callbacks. It needs you to define the different cycle functions (Crossover, mutation...) and constants (probabilities, population and individual size...) and then just run your algorithm. 
+ChromosomeJS also makes easy to 'plug-n-play', so we just choose/define our genetic algorithm and it will take care of run it for you interacting through callbacks. It needs you to define the different cycle functions (Crossover, mutation...) and constants (probabilities, population and individual size...) and then just run your algorithm. Right now there is a very rough implementation that does not consider many aspects. The plan is to try to abstract it to being able to run it on a Worker, abstract you from your types and complex operations reducing it to array operations, make it more efficient for node and browser environments.
+
+### Genetic Algorithm Class
+
+The Genetic Algorithm will instanciate a new Genetic Algorithm (you specify seed, mutation, crossover, fitness, selection), the meta parameters (probabilities, population size, options for the selectors...) and hooks (onGeneration). It enables you to do a simple step using your parameters.
+### Runner
+Runner is just an abstraction on top of genetic algorithm that helps you run your GA Class asynchronously (specially thought for the browser) until it meets certain conditions (number of generations).
 
 ### How to contribute?
 To help ChromosomeJS offer a more performant framework, improve the API, extend it to fit other Evolutionary Algorithms you could start by opening an issue starting with ```[Framework]```.
