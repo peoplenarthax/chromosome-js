@@ -52,3 +52,51 @@ export const xPointCrossOver= (x: number) : CrossoverFunction => (genome1, genom
 export const twoPointCrossOver = xPointCrossOver(2)
 
 export const onePointCrossOver = xPointCrossOver(1)
+
+
+
+type MapToEqual = {
+    [k in string | number]: string | number;
+};
+/* Partially Mapped Crossover Operator */
+export const pmxCrossover : CrossoverFunction = (genome1, genome2) => {
+    let mapOffspring1 : MapToEqual= {}
+    let mapOffspring2 : MapToEqual= {}
+
+    const [point1, point2] = getRandomFixPoints(genome1.length, 2)
+
+    if (!(Array.isArray(genome1) && Array.isArray(genome2))) {
+        throw TypeError("You cant use PMX with object genomes")
+    }
+
+    let offspring = [Array.from(genome1), Array.from(genome2)]
+
+    for (let i = point1; i < point2; i++) {
+        offspring[0][i] = genome2[i]
+        mapOffspring1[genome2[i]] = genome1[i]
+
+        offspring[1][i] = genome1[i]
+        mapOffspring2[genome1[i]] = genome2[i]
+    }
+
+    // Copy values as they are and substitute numbers that are in the map
+    for (let i = 0; i < point1; i++) {
+        while (offspring[0][i] in mapOffspring1) {
+            offspring[0][i] = mapOffspring1[offspring[0][i]]
+        }
+        while (offspring[1][i] in mapOffspring2) {
+            offspring[1][i] = mapOffspring2[offspring[1][i]]
+        }
+    }
+
+    for (let i = point2; i < genome1.length; i++) {
+        while (offspring[0][i] in mapOffspring1) {
+            offspring[0][i] = mapOffspring1[offspring[0][i]]
+        }
+        while (offspring[1][i] in mapOffspring2) {
+            offspring[1][i] = mapOffspring2[offspring[1][i]]
+        }
+    }
+
+        return offspring as [Genome, Genome]
+}
