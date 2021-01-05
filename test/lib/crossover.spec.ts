@@ -1,6 +1,6 @@
 import { mockRandom, resetMockRandom } from 'jest-mock-random';
 import { forAll } from '../test/forAll';
-import { onePointCrossOver, twoPointCrossOver } from '../../src/lib/crossover';
+import { onePointCrossOver, pmxCrossover, twoPointCrossOver } from '../../src/lib/crossover';
 
 describe('onePointCrossOver', () => {
     const ONEPOINT_SAMPLES = [
@@ -67,4 +67,43 @@ describe('twoPointCrossOver', () => {
             [4, 2, 6],
         ]);
     });
+
+    describe('pmxCrossover', () => {
+        const TWOPOINT_SAMPLES = [
+            {ramdomValues: [3 / 8, 2 / 4], expected: [[3, 4, 2, 1, 6, 8, 7, 5], [4, 8, 5, 2, 7, 1, 3, 6]]},
+            {ramdomValues: [3 / 8, 1 / 4], expected: [[ 3, 4, 8, 1, 6, 2, 7, 5], [4, 1, 5, 2, 7, 8, 3, 6]]},
+        ];
+        forAll(TWOPOINT_SAMPLES, ({ramdomValues, expected}) => {
+            it('performs a cross over on two points in the gene list for ramdomValues ', () => {
+                mockRandom(ramdomValues);
+
+                const children = pmxCrossover(
+                    [3, 4, 8, 2, 7, 1, 6, 5], [4, 2, 5, 1, 6, 8, 3, 7]
+                );
+
+                expect(children).toEqual(expected);
+                resetMockRandom();
+            });
+        });
+
+        it('throws an error if we try to use genome objects', () => {
+            const executeError = () => pmxCrossover({a: 1, b: 2}
+                , {a: 1, b: 2});
+
+            expect(executeError).toThrow(TypeError);
+        })
+
+        it('returns the same Set of characters as the parents, always', () => {
+            const parent1 = new Set([3, 4, 8, 2, 7, 1, 6, 5])
+            const parent2 = new Set([4, 2, 5, 1, 6, 8, 3, 7])
+
+            const children = pmxCrossover(Array.from(parent1), Array.from(parent2));
+
+            const ChildrenSet1 = new Set(children[0] as Array<any>)
+            const ChildrenSet2 = new Set(children[1] as Array<any>)
+
+            expect(ChildrenSet1.size).toBe(parent1.size);
+            expect(ChildrenSet2.size).toBe(parent2.size);
+        })
+    })
 });
