@@ -1,4 +1,4 @@
-![npm bundle size (version)](https://img.shields.io/bundlephobia/minzip/chromosome-js/0.4.0)
+![npm bundle size (version)](https://img.shields.io/bundlephobia/minzip/chromosome-js/0.5.0)
 
 # ChromosomeJS 🐒
 
