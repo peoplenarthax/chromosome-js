@@ -60,14 +60,14 @@ type MapToEqual = {
 };
 /* Partially Mapped Crossover Operator */
 export const pmxCrossover : CrossoverFunction = (genome1, genome2) => {
+    if (!(Array.isArray(genome1) && Array.isArray(genome2))) {
+        throw TypeError("You cant use PMX with object genomes")
+    }
+
     let mapOffspring1 : MapToEqual= {}
     let mapOffspring2 : MapToEqual= {}
 
     const [point1, point2] = getRandomFixPoints(genome1.length, 2)
-
-    if (!(Array.isArray(genome1) && Array.isArray(genome2))) {
-        throw TypeError("You cant use PMX with object genomes")
-    }
 
     let offspring = [Array.from(genome1), Array.from(genome2)]
 
@@ -99,4 +99,44 @@ export const pmxCrossover : CrossoverFunction = (genome1, genome2) => {
     }
 
         return offspring as [Genome, Genome]
+}
+
+/* Cycle crossover operator */
+export const cycleCrossover : CrossoverFunction = (genome1, genome2) => {
+    if (!(Array.isArray(genome1) && Array.isArray(genome2))) {
+        throw TypeError("You cant use Cycle Crossover with object genomes")
+    }
+
+    const cycleSet = new Set()
+    let cycles = []
+
+    let i = 0
+    // Find cycles
+    while (cycleSet.size !== genome1.length) {
+        if (!cycleSet.has(genome1[i])) {
+            let pos = i
+            let val : number | null = null
+            let cycle1 = {} as {[k: number]: any}
+            let cycle2 = {} as {[k: number]: any}
+
+            while (genome1[i] != val) {
+                cycleSet.add(genome1[pos])
+                cycle1[pos] = genome1[pos]
+                cycle2[pos] = genome2[pos]
+                val = genome2[pos]
+                pos = genome1.findIndex((value) => value === val)
+            }
+            cycles.push([cycle1, cycle2])
+        }
+        i++
+    }
+
+    // Mix cycles
+    const offspring = cycles.reduce(([first, second], cycle, index) => (
+        // (index + 0) % 2 and (index + 1) % 2 is a way of alternating values between 0 and 1
+        // where for index 0: 0, 1; 1: 1, 0; 2: 0, 1...
+        [Object.assign(first, cycle[(index%2)]), Object.assign(second, cycle[(index+1)%2])]
+    ), [{}, {}])
+
+    return offspring.map(Object.values) as [Genome, Genome]
 }
