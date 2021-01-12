@@ -3,18 +3,18 @@
  * if you need to hook to different parts or change the algorithm
  * you can overwrite the step method in GeneticAlgorithm class
  */
-
 import { GeneticAlgorithm, GeneticAlgorithmConstructor } from './GeneticAlgorithm'
 
  export const GARunner = async <T>(parameters: GeneticAlgorithmConstructor<T>) => {
 	const geneticAlgorithm = new GeneticAlgorithm(parameters)
+	let done = false
 
-	for (let i = 0; i < parameters.config.generations; i++) {
-		/*
-		*	We rather use setTimeout over promises due to problems with
-		* 	promises being continuosly solve block the miniTask queue preventing
-		*	macro task queue (like UI) from working
-		*/
-		setTimeout(() => geneticAlgorithm.step(), 0)
+	for (let i = 0; i < parameters.config.generations && !done; i++) {
+	// 	/*
+	// 	*	We rather use setTimeout over promises due to problems with
+	// 	* 	promises being continuosly solve block the miniTask queue preventing
+	// 	*	macro task queue (like UI) from working
+	// 	*/
+		done = await geneticAlgorithm.step()
 	}
  }
