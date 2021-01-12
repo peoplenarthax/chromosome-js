@@ -9,8 +9,11 @@ type GeneticAlgorithmConfig = {
 	mutationProbability: number
 	crossoverProbability: number
 	individualValidation: boolean
-	tournamentSize: number
+	tournamentSize?: number
+	endCondition?: (population: Individual[]) => boolean
+	preventUIBlock?: boolean
 }
+
 type GeneticAlgorithmHooks = {
 	onGeneration: (population: Individual[], generation: number) => void
 }
@@ -21,7 +24,7 @@ export type GeneticAlgorithmConstructor<T> = {
 	crossover: CrossoverFunction
 	selection: SelectionFunction
 	fitness: FitnessFunction
-	config : GeneticAlgorithmConfig
+	config: GeneticAlgorithmConfig
 	hooks?: GeneticAlgorithmHooks
 }
 
@@ -38,7 +41,7 @@ export class GeneticAlgorithm<T> {
 		mutationProbability: 0.2,
 		crossoverProbability: 0.8,
 		individualValidation: false,
-		tournamentSize: 2
+		preventUIBlock: false
 	}
 	hooks?: GeneticAlgorithmHooks
 	generation: number = 1
@@ -60,25 +63,38 @@ export class GeneticAlgorithm<T> {
 		this.hooks?.onGeneration(this.population, 0)
 	}
 
-	crossoverAndMutation(offspring: [Genome, Genome]) : [Individual, Individual] {
+	mutate(offspring: [Genome, Genome]) : [Genome, Genome] {
 		return offspring.map(individual => {
-			const individualToTransform = this.mutation(this.config.mutationProbability, individual)
-	
-			return {genome: individualToTransform, fitness: this.fitness(individualToTransform)};
-		}) as [Individual, Individual];
+			return this.mutation(this.config.mutationProbability, individual)
+		}) as [Genome, Genome];
 	}
 
-	step() {
+	getNewIndividuals(offspring: [Genome, Genome]): Individual[] {
+		return this.mutate(offspring)
+			.map(!this.config.individualValidation ?
+				generateIndividualWith(this.fitness)
+				: this.fitness as (genome: Genome) => Individual )
+	}
+
+	step() : Promise<boolean> {
+		return new Promise(async (resolve) => {
+			if (this.generation > this.config.generations || this.config.endCondition?.(this.population)) {
+				return resolve(true)
+			}
+
         let nextPopulation = [this.population[0], this.population[1]];
         while (nextPopulation.length !== this.config.populationSize) {
             const [selectedIndividual1, selectedIndividual2] = this.selection(2, this.population, { tournamentSize: this.config.tournamentSize});
 
             if (Math.random() < this.config.crossoverProbability) {
 				const offspring = this.crossover(selectedIndividual2.genome, selectedIndividual1.genome)
-					.map(!this.config.individualValidation ? 
-						generateIndividualWith(this.fitness) 
-						: this.fitness as (genome: Genome) => Individual )
-                nextPopulation = nextPopulation.concat(offspring);
+
+				const offSpringIndividual = !this.config.preventUIBlock
+					? this.getNewIndividuals(offspring)
+					: await new Promise((resolve) => {
+						setTimeout(() => resolve(this.getNewIndividuals(offspring)))}) as Individual[]
+
+                nextPopulation = nextPopulation.concat(offSpringIndividual);
             } else {
                 nextPopulation = nextPopulation.concat([selectedIndividual1, selectedIndividual2]);
             }
@@ -98,5 +114,8 @@ export class GeneticAlgorithm<T> {
 
 		this.hooks?.onGeneration(this.population, this.generation);
 		this.generation++
+
+		return resolve(false)
+	})
 	}
 }

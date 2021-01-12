@@ -1,0 +1,13 @@
+{
+  "name": "hello-world",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "peoplenarthax",
+  "license": "MIT",
+  "scripts": {
+    "start": "tsc src/index.ts && node src/index.js"
+  },
+  "dependencies": {
+    "chromosome-js": "^0.6.0"
+  }
+}

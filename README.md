@@ -37,6 +37,8 @@ ChromosomeJS offers a serie of utility functions to help out with different part
 - ```xPointCrossover - (x: number) => CrossoverFunction``` - Create X amount of fixed points and swap values between 2 individuals 
 - ```onePointCrossover - CrossoverFunction``` - Two individuals generate two offsprings by swapping values at a random point.
 - ```twoPointCrossover - CrossoverFunction``` - Same as one point crossover but with two points
+- ```pmxCrossover - CrossoverFunction``` - Operator which is a bit more optimal for some GA problems when you need a permutation of a set of values in the genome
+- ```cycleCrossover - CrossoverFunction``` - Operator which is a bit more optimal for some GA problems when you need a permutation of a set of values in the genome. ([Better performance than PMX for some problems](https://arxiv.org/pdf/1203.3097.pdf))
 
 #### Mutation `MutationFunction = (probability: number, genome: Genome) => Genome`
 
